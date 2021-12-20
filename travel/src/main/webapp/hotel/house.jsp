@@ -126,104 +126,103 @@
  	</section>
  	
  	<section class="section2">
- 		<div style="width:100%;height:300px;margin-left:20px;" >
- 			<%
- 					ArrayList<String> imagelist=new ArrayList<>();
- 					ArrayList<String> namelist=new ArrayList<>();
- 					ArrayList<String> contentlist=new ArrayList<>();
- 					ArrayList<String> roomsizelist=new ArrayList<>();
- 					ArrayList<String> chkinoutlist=new ArrayList<>();
- 					ArrayList<String> pricelist=new ArrayList<>();
- 					String test2="";
- 					String chkinout="";
- 			%>
- 				<c:set var="in1" value="${info1}"/>
- 				<c:set var="in2" value="${info2}"/>
- 				<c:set var="in3" value="${info3}"/>
- 				<c:set var="in4" value="${info4}"/>
- 				<c:set var="in5" value="${info5}"/>
- 				<c:set var="in6" value="${info6}"/>
- 				<c:set var="in7" value="${info7}"/>
- 				<c:set var="in8" value="${info8}"/>
- 				<c:set var="in9" value="${info9}"/>
- 				<c:set var="in10" value="${info10}"/>
- 				<c:set var="in11" value="${info11}"/>
- 				<c:set var="in12" value="${info12}"/>
- 				<c:set var="in13" value="${info13}"/>
- 				<c:set var="in14" value="${info14}"/>
- 				<c:set var="in15" value="${info15}"/>
- 				<%	
- 					for(int i=0;i<15;i++){
-	 					String link=String.valueOf(pageContext.getAttribute("in"+(i+1)));
-	 					test2=link.substring(link.indexOf("§1")+2,link.indexOf("/§1"));
-	 					namelist.add(i,test2);
-	 					test2=link.substring(link.indexOf("§2")+2,link.indexOf("/§2"));
-	 					imagelist.add(i,test2); 					
-	 					if(link.indexOf("/§10") != -1){
-	 						System.out.println(link);
-		 					test2=link.substring(link.indexOf("/§10")+6,link.length()-1);
-		 					contentlist.add(i,test2);
-	 					}else{
-	 						contentlist.add(i,"없음");
-	 					}
-	 					if(link.indexOf("/§10")!=-1){
-		 					test2=link.substring(link.indexOf("§10")+3,link.indexOf("/§10"));
-		 					roomsizelist.add(i,test2);
-	 					}else{
-	 						roomsizelist.add(i,"없음");
-	 					}
-	 					test2=link.substring(link.indexOf("§8")+2,link.indexOf("/§8"));
-	 					chkinout="체크인: "+test2+" ";
-	 					test2=link.substring(link.indexOf("§9")+2,link.indexOf("/§9"));
-	 					chkinout+="체크아웃: "+test2;
-	 					chkinoutlist.add(i,chkinout);
-	 					test2=link.substring(link.indexOf("§4")+2,link.indexOf("/§4"));
-	 					pricelist.add(i,test2);
- 					}	
- 				%>
- 				
- 				<% for(int i=0;i<15;i++){%>
- 				<div class="hotel" style="width:100%;height:200px;margin-bottom:35px;font-size:15px;color:">
- 					<%if(imagelist.get(i).equals("없음")==true){%><img src="/images/empty_image.jpg" style="width:200px;height:200px;float:left;">
- 					<%}else{%><img src="<%=imagelist.get(i)%>" style="width:200px;height:200px;float:left;"><%}%>
- 					 <div style="float:left;height:100%;width:78%;margin-left:15px;">
- 						<div style="width:100%;height:30px;margin-bottom:10px;">
- 							<a style="font-size:22px;font-weight:bold;"><%=namelist.get(i)%></a>
- 						</div>
- 						<div style="width:50%;height:60px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2 ;-webkit-box-orient: vertical;margin-bottom:10px;color: #505050;">
-	 						<%if(contentlist.get(i).equals("없음")==false){%>
-	 							<%=contentlist.get(i)%>
+ 		<c:if test="${errmsg eq '정상'}" >
+	 			<%
+	 					ArrayList<String> imagelist=new ArrayList<>();
+	 					ArrayList<String> namelist=new ArrayList<>();
+	 					ArrayList<String> contentlist=new ArrayList<>();
+	 					ArrayList<String> roomsizelist=new ArrayList<>();
+	 					ArrayList<String> chkinoutlist=new ArrayList<>();
+	 					ArrayList<String> pricelist=new ArrayList<>();
+	 					String test2="";
+	 					String chkinout="";
+	 			%>
+	 				<c:set var="in1" value="${info1}"/>
+	 				<c:set var="in2" value="${info2}"/>
+	 				<c:set var="in3" value="${info3}"/>
+	 				<c:set var="in4" value="${info4}"/>
+	 				<c:set var="in5" value="${info5}"/>
+	 				<c:set var="in6" value="${info6}"/>
+	 				<c:set var="in7" value="${info7}"/>
+	 				<c:set var="in8" value="${info8}"/>
+	 				<c:set var="in9" value="${info9}"/>
+	 				<c:set var="in10" value="${info10}"/>
+	 				<c:set var="in11" value="${info11}"/>
+	 				<c:set var="in12" value="${info12}"/>
+	 				<c:set var="in13" value="${info13}"/>
+	 				<c:set var="in14" value="${info14}"/>
+	 				<c:set var="in15" value="${info15}"/>
+	 				<%	
+	 					for(int i=0;i<15;i++){
+		 					String link=String.valueOf(pageContext.getAttribute("in"+(i+1)));
+		 					test2=link.substring(link.indexOf("§1")+2,link.indexOf("/§1"));
+		 					namelist.add(i,test2);
+		 					test2=link.substring(link.indexOf("§2")+2,link.indexOf("/§2"));
+		 					imagelist.add(i,test2); 					
+		 					if(link.indexOf("/§10") != -1){
+		 						System.out.println(link);
+			 					test2=link.substring(link.indexOf("/§10")+6,link.length()-1);
+			 					contentlist.add(i,test2);
+		 					}else{
+		 						contentlist.add(i,"없음");
+		 					}
+		 					if(link.indexOf("/§10")!=-1){
+			 					test2=link.substring(link.indexOf("§10")+3,link.indexOf("/§10"));
+			 					roomsizelist.add(i,test2);
+		 					}else{
+		 						roomsizelist.add(i,"없음");
+		 					}
+		 					test2=link.substring(link.indexOf("§8")+2,link.indexOf("/§8"));
+		 					chkinout="체크인: "+test2+" ";
+		 					test2=link.substring(link.indexOf("§9")+2,link.indexOf("/§9"));
+		 					chkinout+="체크아웃: "+test2;
+		 					chkinoutlist.add(i,chkinout);
+		 					test2=link.substring(link.indexOf("§4")+2,link.indexOf("/§4"));
+		 					pricelist.add(i,test2);
+	 					}	
+	 				%>
+	 				
+	 				<% for(int i=0;i<15;i++){%>
+	 				<div class="hotel" style="width:100%;height:200px;margin-bottom:35px;font-size:15px;color:">
+	 					<%if(imagelist.get(i).equals("없음")==true){%><img src="/images/empty_image.jpg" style="width:200px;height:200px;float:left;">
+	 					<%}else{%><img src="<%=imagelist.get(i)%>" style="width:200px;height:200px;float:left;"><%}%>
+	 					 <div style="float:left;height:100%;width:78%;margin-left:15px;">
+	 						<div style="width:100%;height:30px;margin-bottom:10px;">
+	 							<a style="font-size:22px;font-weight:bold;"><%=namelist.get(i)%></a>
+	 						</div>
+	 						<div style="width:50%;height:60px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2 ;-webkit-box-orient: vertical;margin-bottom:10px;color: #505050;">
+		 						<%if(contentlist.get(i).equals("없음")==false){%>
+		 							<%=contentlist.get(i)%>
+		 						<%}%>
+	 						</div>
+	 						<div style="width:70%;height:40px;color: #505050;">
+		 						<%if(roomsizelist.get(i).equals("없음")==false){%>
+		 						<%=roomsizelist.get(i)%>
+		 						<%}%>
+	 						</div>
+	 						<div style="float:right;width:28%;height:50px;text-align:center;">
+	 						<%if(pricelist.get(i).equals("0")==false){%>
+	 							<a style="font-size:25px;font-weight:bold;">
+	 								<%=pricelist.get(i)%> /박
+	 							</a>
+	 						<%}else{%>
+								<a style="font-size:20px;font-weight:bold;"> 						
+	 								객실 가격 전화문의
+	 							</a>
 	 						<%}%>
- 						</div>
- 						<div style="width:70%;height:40px;color: #505050;">
-	 						<%if(roomsizelist.get(i).equals("없음")==false){%>
-	 						<%=roomsizelist.get(i)%>
-	 						<%}%>
- 						</div>
- 						<div style="float:right;width:28%;height:50px;text-align:center;">
- 						<%if(pricelist.get(i).equals("0")==false){%>
- 							<a style="font-size:25px;font-weight:bold;">
- 								<%=pricelist.get(i)%> /박
- 							</a>
- 						<%}else{%>
-							<a style="font-size:20px;font-weight:bold;"> 						
- 								객실 가격 전화문의
- 							</a>
- 						<%}%>
- 						</div>
- 						<div style="width:70%;height:40px;color: #505050;"><%=chkinoutlist.get(i)%></div>
- 					</div>
- 				</div>
- 				<%}%>
- 		</div>
- 		<div style="width:700px;margin-left:10px; margin-top:10px; text-align:center;">
-	  		<c:forEach var="i" begin="1" end="${tcnt}">
-	  			<a href="apitest.do?page_no=${i}">${i}</a>
-	  		</c:forEach>
-	  	</div>
+	 						</div>
+	 						<div style="width:70%;height:40px;color: #505050;"><%=chkinoutlist.get(i)%></div>
+	 					</div>
+	 				</div>
+	 				<%}%>
+	 		<div style="width:700px;margin-left:10px; margin-top:10px; text-align:center;">
+		  		<c:forEach var="i" begin="1" end="${tcnt}">
+		  			<a href="apitest.do?page_no=${i}">${i}</a>
+		  		</c:forEach>
+		  	</div>
+ 		</c:if>
  	</section>
- 	
- 		<a>git 테스트</a>
+
  	<footer>
  	
  	</footer>

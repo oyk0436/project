@@ -53,7 +53,8 @@ public class TravelController {
         
 		String text=sb.toString();
 		
-        int count=(int)Math.ceil(Double.parseDouble(text.substring(text.indexOf("<totalCount>")+12,text.indexOf("</totalCount>")))/15);
+		int total=Integer.parseInt(text.substring(text.indexOf("<totalCount>")+12,text.indexOf("</totalCount>")));
+        int total_page=(int)Math.ceil((double)total/15);
  
         
 		
@@ -311,10 +312,77 @@ public class TravelController {
        		model.addAttribute("info"+(i+1),info);	
        	}
 
-	    System.out.println(count);
-       	model.addAttribute("tcnt",count);
+	    System.out.println(total);
+	    System.out.println(total_page);
+       	model.addAttribute("tcnt",total_page);
        	  
 		return "hotel/house";
 	}
 	
+	@RequestMapping("juso.do")
+	public String Joso(Model model) throws Exception{
+		String currentPage ="1";
+		String countPerPage = "1";
+		String confmKey = "devU01TX0FVVEgyMDIxMTIyMDEwNDgyMzExMjA0ODg=";
+		String keyword = "성동구";
+		// API 호출 URL 정보 설정
+		String apiUrl = "https://www.juso.go.kr/addrlink/addrLinkApi.do?"+
+		"currentPage="+currentPage+
+		"&countPerPage="+countPerPage+
+		"&keyword="+URLEncoder.encode(keyword,"UTF-8")+
+		"&confmKey="+confmKey;
+		URL url = new URL(apiUrl); 
+		BufferedReader br = new BufferedReader(
+		new InputStreamReader(
+		url.openStream(),"UTF-8"));
+		StringBuffer sb = new StringBuffer();
+		String tempStr = null;
+		while(true){
+		tempStr = br.readLine();
+		if(tempStr == null) break;
+		sb.append(tempStr); // 응답결과 XML 저장
+		}
+		br.close();
+		System.out.println(sb.toString());
+		String addr=sb.toString();
+		if(addr.substring(addr.indexOf("<errorMessage>")+4,addr.indexOf("</errorMessage>")).equals("정상")) {
+			String si=addr.substring(addr.indexOf("<siNm><![CDATA[")+15,addr.indexOf("]]></siNm>"));
+			String sgg=addr.substring(addr.indexOf("<sggNm><![CDATA[")+16,addr.indexOf("]]></sggNm>"));
+			 
+			System.out.println(si);
+			System.out.println(sgg);
+			
+			String servicekey="cInuNrwcPd9DJp5JWYGRKBSqEVUa6Q%2FJRkrPp7sY4MNHX3Dh7vS4AKh8i5Qh2SMuLNCG0FMpTZLjto1MPSt6Yw%3D%3D";
+			StringBuilder urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaCode"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+		    urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+		    urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8")); /*한 페이지 결과수*/
+	        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+	        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+	        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+	        url = new URL(urlBuilder.toString());
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+	        BufferedReader rd;
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+	            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	        } else {
+	            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+	        }
+	        StringBuilder sb2 = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb2.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        
+	        System.out.println(sb2.toString());
+	        model.addAttribute("errmsg","정상");
+		}else {
+			String errmsg=addr.substring(addr.indexOf("<errorMessage>")+4,addr.indexOf("</errorMessage>"));
+			model.addAttribute("errmsg",errmsg);
+		}
+		return "";
+	}
 }
