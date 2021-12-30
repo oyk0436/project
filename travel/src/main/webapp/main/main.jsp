@@ -330,8 +330,6 @@
 				$('.todaypic'+scrollcnt).css("display","");
 			}
 		});
-		//////////////////////////////
-		
 	});
 </script>
 

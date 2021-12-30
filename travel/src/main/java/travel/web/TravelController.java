@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import travel.service.TravelService;
+import travel.service.TravelVO;
 
 @Controller
 public class TravelController {
@@ -21,9 +22,18 @@ public class TravelController {
 	@Resource(name="travelService")
 	private TravelService travelService;
 	
-	@RequestMapping("hotel.do")
-	public String apitest(Model model) throws Exception{
+	@RequestMapping("house.do")
+	public String apitest(Model model,TravelVO vo) throws Exception{
 		String servicekey="cInuNrwcPd9DJp5JWYGRKBSqEVUa6Q%2FJRkrPp7sY4MNHX3Dh7vS4AKh8i5Qh2SMuLNCG0FMpTZLjto1MPSt6Yw%3D%3D";
+		
+		ArrayList<TravelVO> list=new ArrayList<>();
+		String areacode=vo.getAreacode();
+		String cityname=vo.getCityname();
+		
+		if(areacode==null || areacode.trim().equals("")) areacode="39";
+		if(cityname==null || cityname.trim().equals("")) cityname="제주";
+		
+		model.addAttribute("cityname",cityname);
 		
 		StringBuilder urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchStay"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
@@ -32,7 +42,7 @@ public class TravelController {
         urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
         urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
         urlBuilder.append("&" + URLEncoder.encode("listYN","UTF-8") + "=" + URLEncoder.encode("N", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("areaCode","UTF-8") + "=" + URLEncoder.encode("39", "UTF-8")); /*지역코드, 시군구코드*/
+        urlBuilder.append("&" + URLEncoder.encode("areaCode","UTF-8") + "=" + URLEncoder.encode(areacode, "UTF-8")); /*지역코드, 시군구코드*/
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -65,7 +75,7 @@ public class TravelController {
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
         urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
         urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
-        urlBuilder.append("&" + URLEncoder.encode("areaCode","UTF-8") + "=" + URLEncoder.encode("39", "UTF-8")); /*지역코드, 시군구코드*/
+        urlBuilder.append("&" + URLEncoder.encode("areaCode","UTF-8") + "=" + URLEncoder.encode(areacode, "UTF-8")); /*지역코드, 시군구코드*/
         url = new URL(urlBuilder.toString());
         conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -97,17 +107,17 @@ public class TravelController {
        		if(array[i].indexOf("<contenttypeid>") == -1)  array[i] += "<contenttypeid>없음</contenttypeid>"; /*위화 마찬 가지로 조금 더 크게 관광,숙박 이런 대분류 를 구분하기 위한것 */
        	}
        	
-        /* 출력된 호텔의 총 개수 (end)를 이용하여 필요한 데이터만 꺼내서 다시 arraylist에 넣는 곳 */
        	for(int i=0;i<end;i++) {
-       		ArrayList<String> info=new ArrayList<>();
+       		vo=new TravelVO();
+       		
        		
        		int j=array[i].indexOf("<title>")+7;
        		int k=array[i].indexOf("</title>");
-       		info.add("§1"+array[i].substring(j,k)+"/§1");	/*<title>제주 호텔</title> 이런 식으로 저장 되어 있는 것을 제주 호텔만 꺼내고 html에서 어떤 부분이 호텔이름인지 구분하기 위해 §1 특수 문자와 번호를 매겨 사용*/
+       		vo.setTitle(array[i].substring(j,k));
        		
        		j=array[i].indexOf("<firstimage>")+12;
        		k=array[i].indexOf("</firstimage>");
-       		info.add("§2"+array[i].substring(j,k)+"/§2");	
+       		vo.setFirstimage(array[i].substring(j,k));	
        		
        		j=array[i].indexOf("<contentid>")+11;
        		k=array[i].indexOf("</contentid>");
@@ -174,7 +184,7 @@ public class TravelController {
 	        	}
 	        }
        		
-	        info.add("§4"+minest+"/§4");    /*호텔 방 최소 가격 */
+	        vo.setMinest(minest);  /*호텔 방 최소 가격 */
 
 	        
 	        /*소개 정보 조회  ( 숙박 업소의 시설등이 출력)*/
@@ -209,26 +219,26 @@ public class TravelController {
 	        int d1=value.indexOf("<checkintime>")+13;   
 	        int d2=value.indexOf("</checkintime>");
 	        String chkin=value.substring(d1,d2);
-	        info.add("§8"+chkin+"/§8");						/* 체크인 시간*/
+	        vo.setChkin(chkin);						/* 체크인 시간*/
 	        
 	        
 	        d1=value.indexOf("<checkouttime>")+14;
 	        d2=value.indexOf("</checkouttime>");
 	        String chkout=value.substring(d1,d2);
-	        info.add("§9"+chkout+"/§9");					/* 체크 아웃 시간*/
+	        vo.setChkout(chkout);
 	        
 	        if(value.indexOf("<roomtype>") !=-1) {			/*방 등급 (스위트룸 , 일반룸 ,마스터룸 )*/
 		        d1=value.indexOf("<roomtype>")+10;
 		        d2=value.indexOf("</roomtype>");
 		        String roomtype=value.substring(d1,d2);
-	       		if(roomtype.length()>1) info.add("§10"+roomtype+"/§10");
+	       		vo.setRoomtype(roomtype);
 	        }
 	        
 	        if(value.indexOf("<barbecue>") !=-1) {
 		        d1=value.indexOf("<barbecue>")+10;
 		        d2=value.indexOf("</barbecue>");
 		        int barbecue=Integer.parseInt(value.substring(d1,d2));
-	       		if(barbecue==1) info.add("바베큐");
+	       		if(barbecue==1) vo.setPlace(vo.getPlace()+"바베큐");
 	        }
        		
 	        
@@ -236,85 +246,91 @@ public class TravelController {
 	       		d1=value.indexOf("<beauty>")+8;
 		        d2=value.indexOf("</beauty>");
 		        int beauty=Integer.parseInt(value.substring(d1,d2));
-	       		if(beauty==1) info.add("뷰티시설");
+	       		if(beauty==1) vo.setPlace(vo.getPlace()+" 뷰티시설");
 	        }
        		
        		if(value.indexOf("<bicycle>") !=-1) {
 	       		d1=value.indexOf("<bicycle>")+9;
 		        d2=value.indexOf("</bicycle>");
 		        int bicycle=Integer.parseInt(value.substring(d1,d2));
-	       		if(bicycle==1) info.add("자전거대여");
+	       		if(bicycle==1) vo.setPlace(vo.getPlace()+" 자전거대여");
        		}
        		
        		if(value.indexOf("<campfire>") !=-1) {
 	       		d1=value.indexOf("<campfire>")+10;
 		        d2=value.indexOf("</campfire>");
 		        int campfire=Integer.parseInt(value.substring(d1,d2));
-	       		if(campfire==1) info.add("캠프파이어");
+	       		if(campfire==1) vo.setPlace(vo.getPlace()+" 캠프파이어");
        		}
        		
        		if(value.indexOf("<fitness>") !=-1) {
 	       		d1=value.indexOf("<fitness>")+9;
 		        d2=value.indexOf("</fitness>");
 		        int fitness=Integer.parseInt(value.substring(d1,d2));
-	       		if(fitness==1) info.add("피트니스");
+	       		if(fitness==1) vo.setPlace(vo.getPlace()+" 피트니스 ");
        		}
 
        		if(value.indexOf("<foodplace>") !=-1) {			/* 식당 시설*/
 	       		d1=value.indexOf("<foodplace>")+11;
 		        d2=value.indexOf("</foodplace>");
 		        String foodplace=value.substring(d1,d2);
-	       		if(foodplace.length()>1) info.add(foodplace);
+		        if(!foodplace.equals("없음")) {
+		        	if(foodplace.length()>1) vo.setPlace(vo.getPlace()+foodplace);
+		        }
        		}
        		
        		if(value.indexOf("<karaoke>") !=-1) {
 	       		d1=value.indexOf("<karaoke>")+9;
 		        d2=value.indexOf("</karaoke>");
 		        int karaoke=Integer.parseInt(value.substring(d1,d2));
-	       		if(karaoke==1) info.add("노래방");
+	       		if(karaoke==1) vo.setPlace(vo.getPlace()+" 노래방");
        		}
        		
        		if(value.indexOf("<pickup>") !=-1) {			/* 픽업 서비스*/
 	       		d1=value.indexOf("<pickup>")+8;
 		        d2=value.indexOf("</pickup>");
 		        String pickup=value.substring(d1,d2);
-	       		if(pickup.length()>1) info.add(pickup);
+		        if(!pickup.equals("불가능")) {
+		        	if(pickup.length()>1) vo.setPlace(vo.getPlace()+" "+pickup);
+		        }
        		}
        		
        		if(value.indexOf("<sauna>") !=-1) {
 	       		d1=value.indexOf("<sauna>")+7;
 		        d2=value.indexOf("</sauna>");
 		        int sauna=Integer.parseInt(value.substring(d1,d2));
-	       		if(sauna==1) info.add("사우나");
+	       		if(sauna==1) vo.setPlace(vo.getPlace()+" 사우나");
        		}
        		
        		if(value.indexOf("<seminar>") !=-1) {
 	       		d1=value.indexOf("<seminar>")+9;
 		        d2=value.indexOf("</seminar>");
 		        int seminar=Integer.parseInt(value.substring(d1,d2));
-	       		if(seminar==1) info.add("세미나실");
+	       		if(seminar==1) vo.setPlace(vo.getPlace()+" 세미나실");
        		}
        		
        		if(value.indexOf("<sports>") !=-1) {
 	       		d1=value.indexOf("<sports>")+8;
 		        d2=value.indexOf("</sports>");
 		        int sports=Integer.parseInt(value.substring(d1,d2));
-	       		if(sports==1) info.add("스포츠시설");
+	       		if(sports==1) vo.setPlace(vo.getPlace()+" 스포츠시설");
        		}
        		
        		if(value.indexOf("<subfacility>") !=-1) {		/*부대 시설 (매점,*/
 	       		d1=value.indexOf("<subfacility>")+13;
 		        d2=value.indexOf("</subfacility>");
 		        String subfacility=value.substring(d1,d2);
-	       		if(subfacility.length()>1) info.add(subfacility);
+	       		if(subfacility.length()>1) vo.setPlace(vo.getPlace()+" "+subfacility);
        		}
-       		
-       		model.addAttribute("info"+(i+1),info);	
+       		vo.setCityname(cityname);
+       		vo.setContentid(contentid);
+       		vo.setContenttypeid(contenttypeid);
+       		list.add(vo);
        	}
 
-	    System.out.println(total);
-	    System.out.println(total_page);
        	model.addAttribute("tcnt",total_page);
+       	
+       	model.addAttribute("list",list);
        	  
 		return "hotel/house";
 	}
@@ -384,5 +400,315 @@ public class TravelController {
 			model.addAttribute("errmsg",errmsg);
 		}
 		return "";
+	}
+	
+	@RequestMapping("houseMain.do")
+	public String housemain(Model model)throws Exception {
+		ArrayList<TravelVO> list=new ArrayList<>();
+		String[] areacode={"1","2","3","4","5","6","7","8","31","32","33","34","35","36","37","38","39"};
+		
+		/*P2znyWDmYOGFRFpOsMxanaS%2BYaMN8zk0hqU02D1%2BdFfHoLuYuq7Zi78NUGo4m3hNz6SF28AIq1XbGeQfW0iDFQ%3D%3D
+		 * cInuNrwcPd9DJp5JWYGRKBSqEVUa6Q%2FJRkrPp7sY4MNHX3Dh7vS4AKh8i5Qh2SMuLNCG0FMpTZLjto1MPSt6Yw%3D%3D*/
+		String servicekey="P2znyWDmYOGFRFpOsMxanaS%2BYaMN8zk0hqU02D1%2BdFfHoLuYuq7Zi78NUGo4m3hNz6SF28AIq1XbGeQfW0iDFQ%3D%3D";
+		
+		StringBuilder urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchStay"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과수*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+        urlBuilder.append("&" + URLEncoder.encode("arrange","UTF-8") + "=" + URLEncoder.encode("B", "UTF-8"));
+        
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        
+        String text=sb.toString();
+        
+        String[] array=text.split("</item>");
+        int imagecount=0;
+        int i=0;
+        
+        while(imagecount<5) {
+        	TravelVO vo=new TravelVO();
+        	if(array[i].indexOf("<firstimage>") != -1) {
+		        	String firstimage=array[i].substring(array[i].indexOf("<firstimage>")+12,array[i].indexOf("</firstimage"));
+		        	String title=array[i].substring(array[i].indexOf("<title>")+7,array[i].indexOf("</title>"));
+		        	String contentid=array[i].substring(array[i].indexOf("<contentid>")+11,array[i].indexOf("</contentid>"));
+		        	String contenttypeid=array[i].substring(array[i].indexOf("<contenttypeid>")+15,array[i].indexOf("</contenttypeid>"));
+		        	vo.setContentid(contentid);
+		        	vo.setContenttypeid(contenttypeid);
+		        	vo.setFirstimage(firstimage);
+		        	vo.setTitle(title);
+		
+		        	list.add(vo);
+		        	imagecount++;
+        	}
+        	i++;
+        }
+        
+		model.addAttribute("list",list);
+		
+		ArrayList<TravelVO> citylist=new ArrayList<>();
+		for(i=0;i<areacode.length;i++) {
+			TravelVO vo=new TravelVO();
+			urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchStay"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+	        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+	        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("15", "UTF-8")); /*한 페이지 결과수*/
+	        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+	        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+	        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+	        urlBuilder.append("&" + URLEncoder.encode("listYN","UTF-8") + "=" + URLEncoder.encode("N", "UTF-8")); 
+	        urlBuilder.append("&" + URLEncoder.encode("areaCode","UTF-8") + "=" + URLEncoder.encode(areacode[i], "UTF-8")); 
+	        
+	        url = new URL(urlBuilder.toString());
+	        conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+	            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	        } else {
+	            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+	        }
+	        sb = new StringBuilder();
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        
+	        String city=sb.toString();
+	        String cityname="";
+	        String totalcnt;
+	        String firstimage="";
+	        if(areacode[i]=="1") { cityname="서울"; firstimage="../images/cityimage/seoul.jpg"; }
+	        else if(areacode[i]=="2") { cityname="인천"; firstimage="../images/cityimage/inchun.jpg";}
+	        else if(areacode[i]=="3") {cityname="대전"; firstimage="../images/cityimage/Daejeon.jpg";}
+	        else if(areacode[i]=="4") {cityname="대구"; firstimage="../images/cityimage/Daegu.jpg";}
+	        else if(areacode[i]=="5") {cityname="광주"; firstimage="../images/cityimage/Gwangju.jpg";}
+	        else if(areacode[i]=="6") {cityname="부산"; firstimage="../images/cityimage/Busan.jpg";}
+	        else if(areacode[i]=="7") {cityname="울산"; firstimage="../images/cityimage/Ulsan.jpg";}
+	        else if(areacode[i]=="8") {cityname="세종특별자치시"; firstimage="../images/cityimage/Sejong.jpg";}
+	        else if(areacode[i]=="31") {cityname="경기도"; firstimage="../images/cityimage/Gyeonggido.jpg";}
+	        else if(areacode[i]=="32") {cityname="강원도"; firstimage="../images/cityimage/Gangwondo.jpg";}
+	        else if(areacode[i]=="33") {cityname="충청북도"; firstimage="../images/cityimage/Chungcheongbukdo.jpg";}
+	        else if(areacode[i]=="34") {cityname="충청남도"; firstimage="../images/cityimage/Chungcheongnamdo.jpg";}
+	        else if(areacode[i]=="35") {cityname="경상북도"; firstimage="../images/cityimage/Gyeongsangbukdo.jpg";}
+	        else if(areacode[i]=="36") {cityname="경상남도"; firstimage="../images/cityimage/Gyeongsangnamdo.jpg";}
+	        else if(areacode[i]=="37") {cityname="전라북도"; firstimage="../images/cityimage/Jeollabukdo.jpg";}
+	        else if(areacode[i]=="38") {cityname="전라남도"; firstimage="../images/cityimage/Jeollanamdo.jpg";}
+	        else if(areacode[i]=="39") {cityname="제주도"; firstimage="../images/cityimage/jeju.jpg";}
+	        
+	        totalcnt=city.substring(city.indexOf("<totalCnt>")+10,city.indexOf("</totalCnt>"));
+	        vo.setTotalcnt(totalcnt);
+	        vo.setFirstimage(firstimage);
+	        vo.setCityname(cityname);
+	        vo.setAreacode(areacode[i]);
+	        
+	        
+	        citylist.add(vo);
+		}
+		
+		model.addAttribute("citylist",citylist);
+		
+		
+		return "hotel/housemain";
+	}
+	
+	@RequestMapping("houseDetail.do")
+	public String housedetail(Model model,TravelVO vo)throws Exception{
+		
+		/*P2znyWDmYOGFRFpOsMxanaS%2BYaMN8zk0hqU02D1%2BdFfHoLuYuq7Zi78NUGo4m3hNz6SF28AIq1XbGeQfW0iDFQ%3D%3D
+		 * cInuNrwcPd9DJp5JWYGRKBSqEVUa6Q%2FJRkrPp7sY4MNHX3Dh7vS4AKh8i5Qh2SMuLNCG0FMpTZLjto1MPSt6Yw%3D%3D*/
+		String servicekey="P2znyWDmYOGFRFpOsMxanaS%2BYaMN8zk0hqU02D1%2BdFfHoLuYuq7Zi78NUGo4m3hNz6SF28AIq1XbGeQfW0iDFQ%3D%3D";
+		String info;
+		String contentid=vo.getContentid();
+		String contenttypeid=vo.getContenttypeid();
+		ArrayList<TravelVO> list=new ArrayList<>();
+		ArrayList<TravelVO> roomlist=new ArrayList<>();
+		TravelVO vo2=new TravelVO();
+		
+		
+		/*소개정보 조회 가져올것 체크인 , 아웃 */
+		StringBuilder urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과수*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+        urlBuilder.append("&" + URLEncoder.encode("contentId","UTF-8") + "=" + URLEncoder.encode(contentid, "UTF-8")); /*컨텐츠아이디*/
+        urlBuilder.append("&" + URLEncoder.encode("contentTypeId","UTF-8") + "=" + URLEncoder.encode(contenttypeid, "UTF-8")); /*컨텐츠타입아이디*/
+        
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+		
+		info=sb.toString();
+		
+		vo.setChkin(info.substring(info.indexOf("<checkintime>")+13,info.indexOf("</checkintime>")));
+		vo.setChkout(info.substring(info.indexOf("<checkouttime>")+14,info.indexOf("</checkouttime>")));
+		
+		
+		/*공통정보조회*/
+		urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과수*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+        urlBuilder.append("&" + URLEncoder.encode("contentId","UTF-8") + "=" + URLEncoder.encode(contentid, "UTF-8")); /*컨텐츠아이디*/
+        urlBuilder.append("&" + URLEncoder.encode("contentTypeId","UTF-8") + "=" + URLEncoder.encode(contenttypeid, "UTF-8")); /*컨텐츠타입아이디*/
+        urlBuilder.append("&" + URLEncoder.encode("defaultYN","UTF-8") + "=" + URLEncoder.encode("Y", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("firstImageYN","UTF-8") + "=" + URLEncoder.encode("Y", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("overviewYN","UTF-8") + "=" + URLEncoder.encode("Y", "UTF-8"));
+       
+        url = new URL(urlBuilder.toString());
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        sb = new StringBuilder();
+
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+		
+        info=sb.toString();
+        
+        String firstimage=info.substring(info.indexOf("<firstimage>")+12,info.indexOf("</firstimage>"));
+        if(firstimage != null && !firstimage.trim().equals("")) vo.setFirstimage(firstimage);
+        else vo.setFirstimage("없음");
+        
+        String title=info.substring(info.indexOf("<title>")+7,info.indexOf("</title>"));
+        if(title!= null && !title.trim().equals("")) vo.setTitle(title);
+        
+        String overview=info.substring(info.indexOf("<overview>")+10,info.indexOf("</overview>"));
+        overview=overview.replace("&amp;nbsp;", " ");
+        overview=overview.replace(". ", ".<br>");
+        overview=overview.replace("&lt;br&gt;","\n" );
+        
+        if(overview != null && !overview.trim().equals("")) vo.setOverview(overview);
+		
+		
+		/*반복정보조회*/
+		urlBuilder = new StringBuilder("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailInfo"); /*URL  ( 조회 기능 별로 다른 URL이 필요 )*/ 
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+servicekey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과수*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*현재 페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*IOS (아이폰), AND (안드로이드), WIN (원도우폰), ETC*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*서비스명=어플명*/
+        urlBuilder.append("&" + URLEncoder.encode("contentId","UTF-8") + "=" + URLEncoder.encode(contentid, "UTF-8")); /*컨텐츠아이디*/
+        urlBuilder.append("&" + URLEncoder.encode("contentTypeId","UTF-8") + "=" + URLEncoder.encode(contenttypeid, "UTF-8")); /*컨텐츠타입아이디*/
+       
+        url = new URL(urlBuilder.toString());
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        sb = new StringBuilder();
+
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+		
+        info=sb.toString();
+        
+        String[] inforoom=info.split("</item>");	
+        
+        for(int i=0;i<inforoom.length-1;i++) {
+        	vo2=new TravelVO();
+        	if(inforoom[i].indexOf("<roomtitle>")!= -1) {
+	        	String roomtitle=inforoom[i].substring(inforoom[i].indexOf("<roomtitle>")+11,inforoom[i].indexOf("</roomtitle>"));
+	        	vo2.setTitle(roomtitle);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roommaxcount>")!= -1) {
+	        	String roommaxcount=inforoom[i].substring(inforoom[i].indexOf("<roommaxcount>")+14,inforoom[i].indexOf("</roommaxcount>"));
+	        	vo2.setRoommaxcount(roommaxcount);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roomimg1>")!= -1) {
+	        	String roomimg=inforoom[i].substring(inforoom[i].indexOf("<roomimg1>")+10,inforoom[i].indexOf("</roomimg1>"));
+	        	if(roomimg != null && !roomimg.trim().equals("")) vo2.setRoomimg1(roomimg);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roomimg1alt>")!= -1) {
+	        	String roomimgalt=inforoom[i].substring(inforoom[i].indexOf("<roomimg1alt>")+13,inforoom[i].indexOf("</roomimg1alt>"));
+	        	if(roomimgalt != null && !roomimgalt.trim().equals("")) vo2.setRoomimg1alt(roomimgalt);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roomoffseasonminfee1>")!= -1) {
+	        	String offmin1=inforoom[i].substring(inforoom[i].indexOf("<roomoffseasonminfee1>")+22,inforoom[i].indexOf("</roomoffseasonminfee1>"));
+	        	if(offmin1.equals("0")) vo2.setRoomoffseasonminfee1("객실 가격 전화문의"); 
+	        	else vo2.setRoomoffseasonminfee1(offmin1);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roomoffseasonminfee2>")!= -1) {
+	        	String offmin2=inforoom[i].substring(inforoom[i].indexOf("<roomoffseasonminfee2>")+22,inforoom[i].indexOf("</roomoffseasonminfee2>"));
+	        	if(offmin2.equals("0")) vo2.setRoomoffseasonminfee2("객실 가격 전화문의");
+	        	else vo2.setRoomoffseasonminfee2(offmin2);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roompeakseasonminfee1>")!= -1) {
+	        	String peekmin1=inforoom[i].substring(inforoom[i].indexOf("<roompeakseasonminfee1>")+23,inforoom[i].indexOf("</roompeakseasonminfee1>"));
+	        	if(peekmin1.equals("0")) vo2.setRoompeakseasonminfee1("객실 가격 전화문의");
+	        	else vo2.setRoompeakseasonminfee1(peekmin1);
+        	}
+        	
+        	if(inforoom[i].indexOf("<roompeakseasonminfee2>")!= -1) {
+	        	String peekmin2=inforoom[i].substring(inforoom[i].indexOf("<roompeakseasonminfee2>")+23,inforoom[i].indexOf("</roompeakseasonminfee2>"));
+	        	if(peekmin2.equals("0")) vo2.setRoompeakseasonminfee2("객실 가격 전화문의");
+	        	else vo2.setRoompeakseasonminfee2(peekmin2);
+        	}
+        	
+        	roomlist.add(vo2);
+        }
+        
+        model.addAttribute("list",vo);
+        model.addAttribute("roomlist",roomlist);
+        
+		return "hotel/housedetail";
 	}
 }
