@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
+	
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -27,9 +27,7 @@ body {
 .container {
 	width:1000px;height:1000px;margin:0 auto;
 }
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
-}
+
 .div1 {
 	width:200px;height:2000px;background-color:#ffffcc;text-align:center;padding-top:20px;float:left;
 }
@@ -62,28 +60,14 @@ header {
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container" style="margin:0 auto;">
 	
-	<%@include file="/include/top1.jsp" %>
-	
-<header>
- 맛집 화면
-</header>
-
 	<div class = "div2">
 		
 		<form name = "frm" id = "frm">
 
-		<div style="width:90%;
-		  			margin-left:30px;
-		  			margin-top:3px;
-		  			text-align:left;
-		  			font-weight:bold;
-		  			font-size:12px;">
-			<a href = "restaurantMain.do">지역별 맛집</a> &nbsp;&nbsp;&nbsp;
-			<a href = "">제철 맛집</a>
-	 	</div>
-	 	
 	 	<div style = "text-align:left;
 	 				  margin-left:80px;
 	 				  margin-top:20px;
@@ -432,7 +416,7 @@ header {
 			pageContext.setAttribute("page_eno", page_eno) ;
  			%>
 			<c:forEach var="i" begin="${lineReview.page_sno }" end="${page_eno }">
-				<a href = "restaurantDetail.do?page_no=${i }&unq=${vo.unq }">${i }</a>
+				<a href = "restaurantDetail.do?page_no=${i }&unq=${vo.unq }"><span style="font-size:14px">${i }</span></a>
 			</c:forEach>
 			<%
 			if (page_eno+1 < total_page) {

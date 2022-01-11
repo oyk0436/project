@@ -121,6 +121,32 @@
 		order by rownum asc
 	</select>
 	
+	<!-- 관광지 이용후기 리스트-->
+	<select id="memberDAO.selectTourElist" resultClass="egovMap">
+		select 
+		    b.* 
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from (
+		        select 
+		        	unq,
+		            title, 
+		            content, 
+		            to_char(rdate,'yyyy/mm/dd') rdate 
+		        from 
+		            linereview 
+		        where 
+		            userid = '$userid$'
+		        and
+		        	category = 'tour'     
+		        order by 
+		            rdate desc ) a ) b
+		where
+			rn between #s_no3# and #e_no3#     
+		order by rownum asc
+	</select>
+	
 	<!-- 음식 이용 후기 총 개수 -->
 	<select id="memberDAO.selectRlistTotal" resultClass="java.lang.Integer">
 		select 
@@ -131,6 +157,18 @@
 			userid = #userid# 
 		and 
 			category='restaurant'
+	</select>
+	
+	<!-- 음식 이용 후기 총 개수 -->
+	<select id="memberDAO.selectTlistTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			linereview 
+		where 	
+			userid = #userid# 
+		and 
+			category='tour'
 	</select>
 	
 	<!-- 음식 이용 후기 수정 상세보기 -->
@@ -170,6 +208,30 @@
 		order by rn asc
 	</select>
 	
+	<!-- 관광지 관심 목록 리스트 -->
+	<select id="memberDAO.selectScrapTlist" resultClass="egovMap">
+		select b.* from (
+		    select rownum rn, a.* from (
+		        select 
+		            unq, 
+		            punq, 
+		            title, 
+		            grade, 
+		            address,
+		            rdate
+		        from 
+		            scrap 
+		        where 
+		            userid = #userid# 
+		        and 
+		            category = 'tour' 
+		        order by
+		            rdate desc ) a ) b
+		where 
+		    rn between #s_no3# and #e_no3# 
+		order by rn asc
+	</select>
+	
 	<!-- 음식점 관심 목록 총 개수 -->
 	<select id="memberDAO.selectScrapRlistTotal" resultClass="java.lang.Integer">
 		select 
@@ -180,6 +242,18 @@
 			userid = #userid# 
 		and 
 			category = 'restaurant'
+	</select>
+	
+	<!-- 관광지 관심 목록 총 개수 -->
+	<select id="memberDAO.selectScrapTlistTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			scrap 
+		where 
+			userid = #userid# 
+		and 
+			category = 'tour'
 	</select>
 	
 	<!-- 숙박 예약 목록 리스트 -->

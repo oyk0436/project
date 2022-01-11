@@ -25,6 +25,10 @@ public interface MemberService {
 	List<?> selectRestaurantElist(LineReviewVO lineReview2) throws Exception;
 	// 숙박 이용 후기 총 개수
 	int selectRlistTotal(LineReviewVO lineReview2) throws Exception;
+	// 관광지 이용 후기 리스트
+	List<?> selectTourElist(LineReviewVO lineReview3) throws Exception;
+	// 관광지 이용 후기 총 개수
+	int selectTlistTotal(LineReviewVO lineReview3) throws Exception;
 	// 이용 후기 수정 목록
 	LineReviewVO selectLineReviewDetail(LineReviewVO vo) throws Exception;
 	// 이용 후기 수정
@@ -36,6 +40,10 @@ public interface MemberService {
 	List<?> selectScrapRlist(ScrapVO scrap2) throws Exception;
 	// 숙박 관심 목록 총 개수
 	int selectScrapRlistTotal(ScrapVO scrap2) throws Exception;
+	// 관광지 관심 목록 리스트
+	List<?> selectScrapTlist(ScrapVO scrap3) throws Exception;
+	// 관광지 관심 목록 총 개수
+	int selectScrapTlistTotal(ScrapVO scrap3) throws Exception;
 	// 관심 삭제
 	int deleteScrap(ScrapVO scrap) throws Exception;
 	// 호텔 예약 현황

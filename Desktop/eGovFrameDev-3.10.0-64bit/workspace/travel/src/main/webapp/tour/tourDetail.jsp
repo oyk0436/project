@@ -12,7 +12,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -26,9 +25,6 @@ body {
 }
 .container {
 	width:1000px;height:1000px;margin:0 auto;
-}
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
 }
 .div1 {
 	width:200px;height:2000px;background-color:#ffffcc;text-align:center;padding-top:20px;float:left;
@@ -62,28 +58,14 @@ header {
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container" style="margin:0 auto;">
-	
-	<%@include file="/include/top1.jsp" %>
-	
-<header>
- 맛집 화면
-</header>
 
 	<div class = "div2">
 		
 		<form name = "frm" id = "frm">
 
-		<div style="width:90%;
-		  			margin-left:30px;
-		  			margin-top:3px;
-		  			text-align:left;
-		  			font-weight:bold;
-		  			font-size:12px;">
-			<a href = "restaurantMain.do">지역별 맛집</a> &nbsp;&nbsp;&nbsp;
-			<a href = "">제철 맛집</a>
-	 	</div>
-	 	
 	 	<div style = "text-align:left;
 	 				  margin-left:80px;
 	 				  margin-top:20px;
@@ -94,12 +76,12 @@ header {
 	 	
 	 	<div style="width:48%;height:200px;float:left;margin-left:10px;margin-top:20px;">
 	 		<img id = "bigImg" 
-	 			 src = "images/restaurant/${vo.title }1.jpg" 
+	 			 src = "images/tour/${vo.title }1.jpg" 
 	 			 onerror="this.src='images/error/errorImg.jpg'"
 	 			 style = "width:300px;height:180px;">
 	 	</div>
 	 	
-	 	<div style="display:table;position:relative;width:700px;width:45%;float:left;">
+	 	<div style="display:table;position:relative;width:700px;width:45%;float:left;padding:20px;">
 	 		<div style=";display:table-row;text-align:center;">
 				<div class="cell1">상호명</div>
 				<div class="cell2">${vo.title }</div>
@@ -128,13 +110,12 @@ header {
 			</div>
 	 	</div>
 	 	
-	 	<input type = "hidden" name = "userid" id = "userid" value = "<%=USERID %>">
+		<input type = "hidden" name = "userid" id = "userid" value = "<%=USERID %>">
 	 	<input type = "hidden" name = "count" id = "count" value = "${scrap.count }">
 	 	<input type = "hidden" name = "title" id = "title" value = "${vo.title }">
 	 	<input type = "hidden" name = "grade" id = "grade" value = "${lineReview.grade }">
 	 	<input type = "hidden" name = "address" id = "address" value = "${vo.address }">
-	 	<input type = "hidden" name = "category" id = "cateogry" value = "restaurant">
-	 	
+	 	<input type = "hidden" name = "category" id = "cateogry" value = "tour">
 	 	<!--  상태 변환 시켜 전달  0(스크랩 X) -> 1(스크랩 O), 1(스크랩 O) -> 0(스크랩 X)-->
 	 	<c:set var = "status" value = "${scrap.status }"/>
 	 	<% 
@@ -211,7 +192,7 @@ header {
 					$.ajax({
 						type : "post",
 						data : formdata,
-						url : "scrapSave.do",
+						url : "tscrapSave.do",
 						
 						dataType : "text",
 						success : function(data) {
@@ -226,7 +207,7 @@ header {
 					$.ajax({
 						type : "post",
 						data : formdata,
-						url : "scrapUpdate.do",
+						url : "tscrapUpdate.do",
 						
 						dataType : "text",
 						success : function(data) {
@@ -252,32 +233,32 @@ header {
 	 	
 	 	
 	 	
-	 	<div style="width:200px;float:left;margin-left:-5px;margin-top:-65px;">
+	 	<div style="width:200px;float:left;margin-left:-4px;margin-top:-75px;">
 	 		<a href = "javscrip:;">
 	 			<img id = "smallImg1" 
-	 				 onmouseover = "document.getElementById('bigImg').src ='images/restaurant/${vo.title }1.jpg'"
-	 				 onmouseout = "document.getElementById('bigImg}').src ='images/restaurant/${vo.title }1.jpg'" 
-	 				 src = "images/restaurant/${vo.title }1.jpg"
+	 				 onmouseover = "document.getElementById('bigImg').src ='images/tour/${vo.title }1.jpg'"
+	 				 onmouseout = "document.getElementById('bigImg}').src ='images/tour/${vo.title }1.jpg'" 
+	 				 src = "images/tour/${vo.title }1.jpg"
 	 				 onerror="this.src='images/error/errorImg.jpg'" 
 	 				 style = "width:90px;height:60px;">
 	 		</a>
 	 	</div>
-	 	<div style="width:200px;float:left;margin-left:100px;margin-top:-65px;">
+	 	<div style="width:200px;float:left;margin-left:102px;margin-top:-75px;">
 	 		<a href = "javscrip:;">
 	 			<img id = "smallImg2" 
-	 				 onmouseover = "document.getElementById('bigImg').src ='images/restaurant/${vo.title }2.jpg'" 
-	 				 onmouseout = "document.getElementById('bigImg').src ='images/restaurant/${vo.title }1.jpg'"
-	 				 src = "images/restaurant/${vo.title }2.jpg" 
+	 				 onmouseover = "document.getElementById('bigImg').src ='images/tour/${vo.title }2.jpg'" 
+	 				 onmouseout = "document.getElementById('bigImg').src ='images/tour/${vo.title }1.jpg'"
+	 				 src = "images/tour/${vo.title }2.jpg" 
 	 				 onerror="this.src='images/error/errorImg.jpg'"
 	 				 style = "width:90px;height:60px;">
 	 		</a>
 	 	</div>
-	 	<div style="width:200px;float:left;margin-left:205px;margin-top:-65px;">
+	 	<div style="width:200px;float:left;margin-left:207px;margin-top:-75px;">
 	 		<a href = "javscrip:;">
 	 			<img id = "smallImg3" 
-	 				 onmouseover = "document.getElementById('bigImg').src ='images/restaurant/${vo.title }3.jpg'" 
-	 				 onmouseout = "document.getElementById('bigImg').src ='images/restaurant/${vo.title }1.jpg'"
-	 				 src = "images/restaurant/${vo.title }3.jpg" 
+	 				 onmouseover = "document.getElementById('bigImg').src ='images/tour/${vo.title }3.jpg'" 
+	 				 onmouseout = "document.getElementById('bigImg').src ='images/tour/${vo.title }1.jpg'"
+	 				 src = "images/tour/${vo.title }3.jpg" 
 	 				 onerror="this.src='images/error/errorImg.jpg'"
 	 				 style = "width:90px;height:60px;">
 	 		</a>
@@ -295,41 +276,33 @@ header {
  		
  		<div style="display:table;position:relative;width:700px;left:50px;top:20px;">
 	 		<div style=";display:table-row;text-align:center;">
-				<div class="cell1">영업 시간</div>
-				<div class="cell2">${vo.availiabletime }</div>
+				<div class="cell1">OPEN</div>
+				<div class="cell2">${vo.open }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">휴무</div>
+				<div class="cell1">CLOSED</div>
 				<div class="cell2">${vo.closed }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">메뉴</div>
-				<div class="cell2">${vo.menu }</div>
+				<div class="cell1">관광지 정보</div>
+				<div class="cell2">${vo.experienceinfo }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">배달/포장</div>
-				<div class="cell2">${vo.packaging }</div>
+				<div class="cell1">이용 가능 시간</div>
+				<div class="cell2">${vo.availabletime }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">놀이방</div>
-				<div class="cell2">${vo.child }</div>
+				<div class="cell1">이용 가능 연령</div>
+				<div class="cell2">${vo.accommodatenumber }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">금연석</div>
-				<div class="cell2">${vo.smoking }</div>
+				<div class="cell1">주차 유무</div>
+				<div class="cell2">${vo.car }</div>
 			</div>
 			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">주차</div>
-				<div class="cell2">${vo.parking }</div>
+				<div class="cell1">반려 동물 입장 여부</div>
+				<div class="cell2">${vo.pet }</div>
 			</div>
-			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">기타시설</div>
-				<div class="cell2">${vo.information }</div>
-			</div>
-			<div style=";display:table-row;text-align:center;">
-				<div class="cell1">소개</div>
-				<div class="cell2">${vo.summary }</div>
-			</div>		
  		</div>
 		
 		<div style = "text-align:left;
@@ -363,7 +336,7 @@ header {
 			%>
 			var unq = document.getElementById("unq").value;
 			
-			var url = "restaurantLineReview.do?unq="+unq;
+			var url = "tourLineReview.do?unq="+unq;
 			var p_width = 500;
 			var p_height = 400;
 			var s_width = window.screen.width/2 - p_width/2;
@@ -428,7 +401,7 @@ header {
 			pageContext.setAttribute("page_eno", page_eno) ;
  			%>
 			<c:forEach var="i" begin="${lineReview.page_sno }" end="${page_eno }">
-				<a href = "restaurantDetail.do?page_no=${i }&unq=${vo.unq }">${i }</a>
+				<a href = "restaurantDetail.do?page_no=${i }&unq=${vo.unq }"><span style="font-size:14px">${i }</span></a>
 			</c:forEach>
 			<%
 			if (page_eno+1 < total_page) {
@@ -705,7 +678,7 @@ header {
 		        // 커피숍 마커들만 지도에 표시하도록 설정합니다
 		        setRestaurantMarkers(map);
 		        setTravelMarkers(null);
-		        setTourMarkers(null);
+		        setTourMarkers(map);
 		        
 		    } else if (type === 'travel') { // 편의점 카테고리가 클릭됐을 때
 		    
@@ -715,9 +688,9 @@ header {
 		        tourMenu.className = '';
 		        
 		        // 편의점 마커들만 지도에 표시하도록 설정합니다
-		        setRestaurantMarkers(map);
+		        setRestaurantMarkers(null);
 		        setTravelMarkers(map);
-		        setTourMarkers(null);
+		        setTourMarkers(map);
 		        
 		    } else if (type === 'tour') { // 주차장 카테고리가 클릭됐을 때
 		     
@@ -727,14 +700,13 @@ header {
 		        tourMenu.className = 'menu_selected';
 		        
 		        // 주차장 마커들만 지도에 표시하도록 설정합니다
-		        setRestaurantMarkers(map);
+		        setRestaurantMarkers(null);
 		        setTravelMarkers(null);
 		        setTourMarkers(map);  
 		    }    
 		} 
 		</script>
 		
- 		
 	</div>
 
 </div>

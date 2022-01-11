@@ -14,7 +14,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
 	<link rel="stylesheet" href="/resources/demos/style.css">
   	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -67,24 +66,11 @@ body {
 .div_button {
 	width:700px;text-align:center;margin-top:10px;
 }
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
-}
+
 .table1 {
 	width:600px;border:1px solid #ccc;border-collapse:collapse;
 }
-a {
-	text-decoration:none;color:#000000;
-}
-th {
-	padding:5px;border:1px solid #ccc;
-}
-td {
-	padding:5px;border:1px solid #ccc;text-align:center;
-}
-.td1 {
-	text-align:center;padding:5px;
-}
+
 </style>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -293,14 +279,10 @@ $(function(){
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container" style="margin:0 auto;">
 
-<%@include file="/include/top1.jsp" %>
-
-<header>
- 맛집 화면
-</header>
-	
 	<form id="frm">
 		<input type="hidden" name="id_chk" id="id_chk" value="0">
 	<div style="width:90%;

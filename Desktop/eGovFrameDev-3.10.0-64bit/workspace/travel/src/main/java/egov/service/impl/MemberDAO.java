@@ -85,4 +85,20 @@ public class MemberDAO extends EgovAbstractDAO {
 		return (int)select("memberDAO.selectHotelListTotal",hotel);
 	}
 
+	public List<?> selectTourElist(LineReviewVO lineReview3) {
+		return list("memberDAO.selectTourElist",lineReview3);
+	}
+
+	public int selectTlistTotal(LineReviewVO lineReview3) {
+		return (int)select("memberDAO.selectTlistTotal",lineReview3);
+	}
+
+	public List<?> selectScrapTlist(ScrapVO scrap3) {
+		return list("memberDAO.selectScrapTlist",scrap3);
+	}
+
+	public int selectScrapTlistTotal(ScrapVO scrap3) {
+		return (int)select("memberDAO.selectScrapTlistTotal",scrap3);
+	}
+
 }

@@ -7,8 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import egov.service.LineReviewVO;
+import egov.service.RestaurantVO;
+import egov.service.ScrapVO;
 import egov.service.TourService;
 import egov.service.TourVO;
+import egov.service.TravelVO;
 
 @Service("tourService")
 public class TourImpl implements TourService {
@@ -64,5 +67,40 @@ public class TourImpl implements TourService {
 	@Override
 	public int selectTourGrade(LineReviewVO lineReview) throws Exception {
 		return tourDAO.selectTourGrade(lineReview);
+	}
+
+	@Override
+	public List<?> selectRestaurantMap(RestaurantVO restaurantMap) throws Exception {
+		return tourDAO.selectRestaurantMap(restaurantMap);
+	}
+	
+	@Override
+	public List<?> selectTravelMap(TravelVO travelMap) throws Exception {
+		return tourDAO.selectTravelMap(travelMap);
+	}
+
+	@Override
+	public List<?> selectTourMap(TourVO tourMap) throws Exception {
+		return tourDAO.selectTourMap(tourMap);
+	}
+
+	@Override
+	public int selectScrapCount(ScrapVO scrap) throws Exception {
+		return tourDAO.selectScrapCount(scrap);
+	}
+
+	@Override
+	public String insertScrap(ScrapVO scrap) throws Exception {
+		return tourDAO.insertScrap(scrap);
+	}
+
+	@Override
+	public int selectScrapDetail(ScrapVO scrap) throws Exception {
+		return tourDAO.selectScrapDetail(scrap);
+	}
+
+	@Override
+	public int updateScrap(ScrapVO scrap) throws Exception {
+		return tourDAO.updateScrap(scrap);
 	}
 }

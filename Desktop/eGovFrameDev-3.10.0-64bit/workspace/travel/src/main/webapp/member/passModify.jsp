@@ -12,7 +12,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -58,16 +57,13 @@ body {
 	width:1000px;height:2000px;margin:0 auto;
 }
 .div1 {
-	width:200px;height:700px;background-color:#fbf3f2;float:left;font-size:20px;text-align:left;
+	width:200px;height:700px;float:left;font-size:20px;text-align:left;
 }
 .div2 {
-	margin:0 auto;width:700px;height:1000px;text-align:center;padding-top:20px;float:left;background-color:rgb(255, 255, 255);
+	margin:0 auto;width:700px;height:1000px;text-align:center;float:left;background-color:rgb(255, 255, 255);
 }
 .div_button {
 	width:700px;text-align:center;margin-top:10px;
-}
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
 }
 a {
 	text-decoration:none;color:#000000;
@@ -157,13 +153,9 @@ $(function(){
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container" style="margin:0 auto;">
-
-<%@include file="/include/top1.jsp" %>
-
-<header>
- 맛집 화면
-</header>
 	
 	<div class="div1">
 		<%@ include file="/include/mypage_left.jsp" %>

@@ -27,7 +27,6 @@ public class RestaurantDAO extends EgovAbstractDAO {
 	}
 
 	public String insertLineReview(LineReviewVO lineReview) {
-		System.out.println("====== restaurantDAO ======");
 		return (String)insert("restaurantDAO.insertLineReview",lineReview);
 	}
 

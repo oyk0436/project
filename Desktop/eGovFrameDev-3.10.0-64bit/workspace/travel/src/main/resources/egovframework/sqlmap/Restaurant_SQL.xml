@@ -299,6 +299,8 @@
 					    linereview
 					where
 					    linereview.punq = (select unq from restaurant where unq = $unq$)
+					and
+						category = 'restaurant'
 					order by 
 						unq desc ) a ) b
 		where
@@ -314,12 +316,12 @@
 	
 	<!-- 스크랩 유무 확인 -->
 	<select id="restaurantDAO.selectScrapCount" resultClass="java.lang.Integer">
-		select count(*) from scrap where userid = #userid# and punq = #unq#
+		select count(*) from scrap where userid = #userid# and punq = #unq# and category = 'restaurant'
 	</select>
 	
 	<!-- 스크랩 상태 확인 -->
 	<select id="restaurantDAO.selectScrapDetail" resultClass="java.lang.Integer">
-		select status from scrap where userid = #userid# and punq = #unq#
+		select status from scrap where userid = #userid# and punq = #unq# and category = 'restaurant'
 	</select>
 	
 	<!-- 조회수 증가 -->
@@ -329,7 +331,7 @@
 
 	<!-- 스크랩 수정 -->
 	<update id="restaurantDAO.updateScrap">
-		update scrap set status = #status#, rdate = sysdate where userid = #userid# and punq = #unq#
+		update scrap set status = #status#, rdate = sysdate where userid = #userid# and punq = #unq# and category = 'restaurant'
 	</update>
 
 	<!-- 맛집 한줄 리뷰 삽입 -->
@@ -382,7 +384,7 @@
 							#grade#,
 							#address#,
 							1,
-							#category#,
+							'restaurant',
 							sysdate)
 	</insert>
 	

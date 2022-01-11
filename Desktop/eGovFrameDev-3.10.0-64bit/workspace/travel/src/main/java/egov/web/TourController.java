@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egov.service.LineReviewVO;
 import egov.service.MemberVO;
@@ -104,15 +105,17 @@ public class TourController {
 		// 맛집 평점 세팅
 		int grade = tourService.selectTourGrade(lineReview);	
 		
-		/*
-		 * // 스크랩 유무 확인 int count = restaurantService.selectScrapCount(scrap);
-		 * scrap.setCount(count);
-		 * 
-		 * int status = 1; // 스크랩 상태 확인 (저장이 안되어 있는 경우 status 값이 없으므로 스크랩이 존재 할 경우에만
-		 * status를 불러온다.) if (count > 0) { status =
-		 * restaurantService.selectScrapDetail(scrap); } scrap.setStatus(status);
-		 * model.addAttribute("scrap",scrap);
-		 */
+		// 스크랩 유무 확인
+		int count = tourService.selectScrapCount(scrap);
+		scrap.setCount(count);
+		
+		int status = 1;
+		// 스크랩 상태 확인 (저장이 안되어 있는 경우 status 값이 없으므로 스크랩이 존재 할 경우에만 status를 불러온다.)
+		if (count > 0) {
+			status = tourService.selectScrapDetail(scrap);
+		}
+		scrap.setStatus(status);
+		model.addAttribute("scrap",scrap);
 		
 		// jsp로 전송할 변수 세팅
 		lineReview.setS_no(s_no);
@@ -132,23 +135,83 @@ public class TourController {
 		// 맛집 한줄 리뷰 목록
 		List<?> reviewlist = tourService.selectLineReviewList(lineReview);
 		// 맛집 , 숙박, 관광지 지도 리스트
-		/*
-		 * List<?> restaurantMapList =
-		 * restaurantService.selectRestaurantMap(restaurantMap); List<?> travelMapList =
-		 * restaurantService.selectTravelMap(travelMap); List<?> tourMapList =
-		 * restaurantService.selectTourMap(tourMap);
-		 */
+		List<?> restaurantMapList = tourService.selectRestaurantMap(restaurantMap);
+		List<?> travelMapList = tourService.selectTravelMap(travelMap);
+		List<?> tourMapList = tourService.selectTourMap(tourMap);
 		
 		// jsp 전송
 		model.addAttribute("vo", vo);
 		model.addAttribute("lineReview", lineReview);
 		model.addAttribute("reviewlist", reviewlist);
-		//model.addAttribute("restaurantMapList",restaurantMapList);
-		//model.addAttribute("travelMapList",travelMapList);
-		//model.addAttribute("tourMapList",tourMapList);
+		model.addAttribute("restaurantMapList",restaurantMapList);
+		model.addAttribute("travelMapList",travelMapList);
+		model.addAttribute("tourMapList",tourMapList);
 		model.addAttribute("s_field", vo.getS_field());
 		model.addAttribute("s_text", vo.getS_text());
 	
 		return "tour/tourDetail";
+	}
+	
+	// 관광지 한줄 리뷰 화면
+	@RequestMapping(value="/tourLineReview.do")
+	public String tourLineReview(TourVO vo, Model model) throws Exception {
+		
+		// 상세보기 서비스 실행
+		vo = tourService.selectTourDetail(vo);
+		
+		model.addAttribute("vo", vo);
+		
+		return "tour/tourLineReview";
+	}
+	
+	// 맛집 한줄 리뷰 저장
+	@RequestMapping(value="/tourLineReviewSave.do")
+	@ResponseBody
+	public String lineReviewSave(LineReviewVO lineReview, Model model) throws Exception {
+		
+		String result = tourService.insertLineReview(lineReview);
+		
+		String message = "ok";
+		if (result != null) {
+			message = "error";
+		}
+		
+		return message;
+	}
+	
+	@RequestMapping(value="tscrapSave.do")
+	@ResponseBody
+	public String scapSave(ScrapVO scrap) throws Exception {
+		
+		String msg = "ok";
+		
+		String result = tourService.insertScrap(scrap);
+		
+		if (result != null) {
+			msg = "fail";
+		}
+		
+		return msg;
+	}
+	
+	@RequestMapping(value="tscrapUpdate.do")
+	@ResponseBody
+	public String scrapUpdate(ScrapVO scrap) throws Exception {
+		
+		String msg = "ok";
+		// 스크랩 취소할 경우 : 0, 스크랩 실행할 경우 : 1
+		int status = scrap.getStatus();
+		
+		int result = tourService.updateScrap(scrap);
+		
+		if (result != 0) {
+			if (status == 0) {
+				msg = "cancel";
+			} else if (status == 1) {
+				msg = "ok";
+			}
+		}
+		
+		return msg;
 	}
 }

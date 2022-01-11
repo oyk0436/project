@@ -52,7 +52,86 @@ public class LineReviewVO {
 	int page_sno2 = 1;
 	int page_eno2 = page_sno2 + (page_size2-1);
 	
+	// 총 데이터 개수
+	int total3 = 0;	
+	// 총 페이지 개수
+	int total_page3 = 1;	
+	// 출력 페이지 번호
+	int page_no3 = 1;	
+	// 출력 페이지 시작 행 번호
+	int rownum3 = 1;	
+	// SQL 범위 시작번호 
+	int s_no3 = 1;	
+	// SQL 범위 끝번호
+	int e_no3 = 10;	
+	// 한 화면에 출력할 행 개수
+	int page_unit3 = 5;	
+	// 한 화면에 출력할 페이지 개수
+	int page_size3 = 10;	
+	int page_sno3 = 1;
+	int page_eno3 = page_sno3 + (page_size3-1);
 	
+	
+	public int getTotal3() {
+		return total3;
+	}
+	public void setTotal3(int total3) {
+		this.total3 = total3;
+	}
+	public int getTotal_page3() {
+		return total_page3;
+	}
+	public void setTotal_page3(int total_page3) {
+		this.total_page3 = total_page3;
+	}
+	public int getPage_no3() {
+		return page_no3;
+	}
+	public void setPage_no3(int page_no3) {
+		this.page_no3 = page_no3;
+	}
+	public int getRownum3() {
+		return rownum3;
+	}
+	public void setRownum3(int rownum3) {
+		this.rownum3 = rownum3;
+	}
+	public int getS_no3() {
+		return s_no3;
+	}
+	public void setS_no3(int s_no3) {
+		this.s_no3 = s_no3;
+	}
+	public int getE_no3() {
+		return e_no3;
+	}
+	public void setE_no3(int e_no3) {
+		this.e_no3 = e_no3;
+	}
+	public int getPage_unit3() {
+		return page_unit3;
+	}
+	public void setPage_unit3(int page_unit3) {
+		this.page_unit3 = page_unit3;
+	}
+	public int getPage_size3() {
+		return page_size3;
+	}
+	public void setPage_size3(int page_size3) {
+		this.page_size3 = page_size3;
+	}
+	public int getPage_sno3() {
+		return page_sno3;
+	}
+	public void setPage_sno3(int page_sno3) {
+		this.page_sno3 = page_sno3;
+	}
+	public int getPage_eno3() {
+		return page_eno3;
+	}
+	public void setPage_eno3(int page_eno3) {
+		this.page_eno3 = page_eno3;
+	}
 	public int getTotal2() {
 		return total2;
 	}

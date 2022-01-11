@@ -12,7 +12,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -58,16 +57,13 @@ body {
 	width:1000px;height:2000px;margin:0 auto;
 }
 .div1 {
-	width:200px;height:700px;background-color:#fbf3f2;float:left;font-size:20px;text-align:left;
+	width:200px;height:700px;float:left;font-size:20px;text-align:left;
 }
 .div2 {
-	margin:0 auto;width:700px;height:1000px;text-align:center;padding-top:20px;float:left;background-color:rgb(255, 255, 255);
+	margin:0 auto;width:700px;height:1000px;text-align:center;float:left;background-color:rgb(255, 255, 255);
 }
 .div_button {
 	width:700px;text-align:center;margin-top:10px;
-}
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
 }
 a {
 	text-decoration:none;color:#000000;
@@ -111,13 +107,9 @@ function fn_lineReviewDelete(a,b) {
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container" style="margin:0 auto;">
-
-<%@include file="/include/top1.jsp" %>
-
-<header>
- 맛집 화면${lineReview2.unq }
-</header>
 	
 	<div class="div1">
 		<%@ include file="/include/mypage_left.jsp" %>
@@ -180,10 +172,10 @@ function fn_lineReviewDelete(a,b) {
 				<div class="membercell2" style="width:50%;text-align:left;">${result2.content }</div>
 				<div class="membercell2" style="width:15%;">${result2.rdate }</div>
 				<div class="membercell2" style="width:5%;">
-					<a href = "javascript:void(0)" onclick="fn_lineReviewModify('${result2.unq}','${result2.title }')">수정</a>
+					<a href = "javascript:void(0)" onclick="fn_lineReviewModify('${result2.unq}','${result2.title }')"><span style="font-size:12px;">수정</span></a>
 				</div>
 				<div class="membercell2" style="width:5%;">
-					<a href = "javascript:void(0)" onclick="fn_lineReviewDelete('${result2.unq}','${result2.title }')">삭제</a>
+					<a href = "javascript:void(0)" onclick="fn_lineReviewDelete('${result2.unq}','${result2.title }')"><span style="font-size:12px;">삭제</span></a>
 				</div>
 			</div>
 			
@@ -219,7 +211,7 @@ function fn_lineReviewDelete(a,b) {
 		pageContext.setAttribute("page_eno2", page_eno2) ;
 			%>
 		<c:forEach var="i" begin="${lineReview2.page_sno2 }" end="${page_eno2 }">
-			<a href = "memberEpilogue.do?page_no2=${i }">${i }</a>
+			<a href = "memberEpilogue.do?page_no2=${i }"><span style="font-size:14px;">${i }</span></a>
 		</c:forEach>
 		<%
 		if (page_eno2+1 < total_page2) {
@@ -243,10 +235,65 @@ function fn_lineReviewDelete(a,b) {
 				<div class="membercell1" style="width:5%;">수정</div>
 				<div class="membercell1" style="width:5%;">삭제</div>
 			</div>
+			
+			<c:set var="rownum3" value="${lineReview3.rownum3 }"/>
+			<c:forEach var = "result3" items = "${list3 }">
+		
+			<div style="display:table-row;text-align:center;">
+				<div class="membercell2" style="width:5%;">${rownum3 }</div>
+				<div class="membercell2" style="width:20%;">${result3.title }</div>
+				<div class="membercell2" style="width:50%;text-align:left;">${result3.content }</div>
+				<div class="membercell2" style="width:15%;">${result3.rdate }</div>
+				<div class="membercell2" style="width:5%;">
+					<a href = "javascript:void(0)" onclick="fn_lineReviewModify('${result3.unq}','${result3.title }')"><span style="font-size:12px;">수정</span></a>
+				</div>
+				<div class="membercell2" style="width:5%;">
+					<a href = "javascript:void(0)" onclick="fn_lineReviewDelete('${result3.unq}','${result3.title }')"><span style="font-size:12px;">삭제</span></a>
+				</div>
+			</div>
+			
+			<c:set var="rownum3" value="${rownum3-1 }"/>
+			</c:forEach>
+			
 		</div>
 	</div>
 	
-	
+	<div style = "text-align:center;margin-top:80px;margin-left:100px;font-size:12px;">
+		<c:set var="page_sno3" value="${lineReview3.page_sno3 }"/>
+		<%
+		int page_sno3 = (int)pageContext.getAttribute("page_sno3");
+		pageContext.setAttribute("page_sno3", page_sno3);
+		
+		if (page_sno3-1 > 0) {
+		%>
+			<a href = "memberEpilogue.do?page_no3=${page_sno3-1 }">이전</a>
+		<%
+		}
+		%>
+
+		<c:set var="page_eno3" value="${lineReview3.page_eno3 }"/>
+		<c:set var="total_page3" value="${lineReview3.total_page3 }"/>
+		<%
+		int page_eno3 = (int)pageContext.getAttribute("page_eno3");
+		int total_page3 = (int)pageContext.getAttribute("total_page3");
+		
+		if (page_eno3 > total_page3) {
+			page_eno3 = total_page3;
+		}
+		
+		pageContext.setAttribute("page_eno3", page_eno3) ;
+			%>
+		<c:forEach var="i" begin="${lineReview3.page_sno3 }" end="${page_eno3 }">
+			<a href = "memberEpilogue.do?page_no3=${i }"><span style="font-size:14px;">${i }</span></a>
+		</c:forEach>
+		<%
+		if (page_eno3+1 < total_page3) {
+		%>
+			<a href = "memberEpilogue.do?page_no3=${lineReview3.page_eno3+1 }">다음</a>
+		<%
+		}
+		%>
+	</div>
 	
 	</form>
 	

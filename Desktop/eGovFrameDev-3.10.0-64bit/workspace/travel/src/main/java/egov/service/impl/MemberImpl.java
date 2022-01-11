@@ -107,5 +107,25 @@ public class MemberImpl implements MemberService {
 		return memberDAO.selectHotelListTotal(hotel);
 	}
 
+	@Override
+	public List<?> selectTourElist(LineReviewVO lineReview3) throws Exception {
+		return memberDAO.selectTourElist(lineReview3);
+	}
+
+	@Override
+	public int selectTlistTotal(LineReviewVO lineReview3) throws Exception {
+		return memberDAO.selectTlistTotal(lineReview3);
+	}
+
+	@Override
+	public List<?> selectScrapTlist(ScrapVO scrap3) throws Exception {
+		return memberDAO.selectScrapTlist(scrap3);
+	}
+
+	@Override
+	public int selectScrapTlistTotal(ScrapVO scrap3) throws Exception {
+		return memberDAO.selectScrapTlistTotal(scrap3);
+	}
+
 	
 }

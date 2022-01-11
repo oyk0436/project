@@ -205,12 +205,14 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="memberEpilogue.do")
-	public String memberEpilogue(LineReviewVO lineReview2, Model model, HttpSession session) throws Exception {
+	public String memberEpilogue(LineReviewVO lineReview2, LineReviewVO lineReview3, Model model, HttpSession session) throws Exception {
 		
 		String userid = (String) session.getAttribute("MEMBER_SESSION_ID");
 		
 		lineReview2.setUserid(userid);
+		lineReview3.setUserid(userid);
 		
+		// 음식점
 		// 출력 페이지 번호
 		int page_no2 = lineReview2.getPage_no2();
 		int page_unit2 = lineReview2.getPage_unit2();
@@ -230,6 +232,26 @@ public class MemberController {
 		int page_sno2 = ((page_no2-1)/ page_unit2) * page_unit2 +1;
 		int page_eno2 = page_sno2 + (page_size2-1);
 		
+		// 관광지
+		// 출력 페이지 번호
+		int page_no3 = lineReview3.getPage_no3();
+		int page_unit3 = lineReview3.getPage_unit3();
+		
+		// 페이지 번호를 이용하여 sql의 시작번호와 끝번호 변수 설정
+		int page_size3 = lineReview3.getPage_size3();
+		int s_no3 = (page_no3-1)*page_unit3 + 1;
+		int e_no3 = s_no3 + (page_unit3-1);
+
+		// 맛집 한줄 리뷰 총 개수
+		int total3 = memberService.selectTlistTotal(lineReview3);	
+		// 총 페이지 번호 설정
+		int total_page3 = (int) Math.ceil((double)total3/page_unit3);	
+		// 출력 페이지의 시작 행번호 설정
+		int rownum3 = total3 - (page_no3-1)*page_unit3;		
+		
+		int page_sno3 = ((page_no3-1)/ page_unit3) * page_unit3 +1;
+		int page_eno3 = page_sno3 + (page_size3-1);
+		
 		lineReview2.setS_no2(s_no2);
 		lineReview2.setE_no2(e_no2);
 		lineReview2.setTotal2(total2);
@@ -238,11 +260,23 @@ public class MemberController {
 		lineReview2.setPage_sno2(page_sno2);
 		lineReview2.setPage_eno2(page_eno2);
 		
+		lineReview3.setS_no3(s_no3);
+		lineReview3.setE_no3(e_no3);
+		lineReview3.setTotal3(total3);
+		lineReview3.setTotal_page3(total_page3);
+		lineReview3.setRownum3(rownum3);
+		lineReview3.setPage_sno3(page_sno3);
+		lineReview3.setPage_eno3(page_eno3);
+		
 		// 음식점 이용 후기 리스트
 		List<?> list2 = memberService.selectRestaurantElist(lineReview2);
+		// 관광지 이용 후기 리스트
+		List<?> list3 = memberService.selectTourElist(lineReview3);
 		
 		model.addAttribute("list2",list2);
+		model.addAttribute("list3",list3);
 		model.addAttribute("lineReview2",lineReview2);
+		model.addAttribute("lineReview3",lineReview3);
 		
 		return "member/memberEpilogue";
 	}
@@ -298,11 +332,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="memberScrap.do")
-	public String memberScrap(ScrapVO scrap2, Model model, HotelorderVO hotel, HttpSession session) throws Exception {
+	public String memberScrap(ScrapVO scrap2, ScrapVO scrap3, Model model, HotelorderVO hotel, HttpSession session) throws Exception {
 		
 		// 아이디 호출
 		String userid = (String) session.getAttribute("MEMBER_SESSION_ID");
 		scrap2.setUserid(userid);
+		scrap3.setUserid(userid);
 		hotel.setUserid(userid);
 		
 		// 숙박
@@ -345,6 +380,26 @@ public class MemberController {
 		int page_sno2 = ((page_no2-1)/ page_unit2) * page_unit2 +1;
 		int page_eno2 = page_sno2 + (page_size2-1);
 		
+		// 관광지
+		// 출력 페이지 번호
+		int page_no3 = scrap3.getPage_no3();
+		int page_unit3 = scrap3.getPage_unit3();
+		
+		// 페이지 번호를 이용하여 sql의 시작번호와 끝번호 변수 설정
+		int page_size3 = scrap3.getPage_size3();
+		int s_no3 = (page_no3-1)*page_unit3 + 1;
+		int e_no3 = s_no3 + (page_unit3-1);
+
+		// 맛집 한줄 리뷰 총 개수
+		int total3 = memberService.selectScrapTlistTotal(scrap3);	
+		// 총 페이지 번호 설정
+		int total_page3 = (int) Math.ceil((double)total2/page_unit3);	
+		// 출력 페이지의 시작 행번호 설정
+		int rownum3 = total3 - (page_no2-1)*page_unit3;		
+		
+		int page_sno3 = ((page_no3-1)/ page_unit3) * page_unit3 +1;
+		int page_eno3 = page_sno3 + (page_size3-1);
+		
 		hotel.setS_no1(s_no1);
 		hotel.setE_no1(e_no1);
 		hotel.setTotal1(total1);
@@ -361,12 +416,23 @@ public class MemberController {
 		scrap2.setPage_sno2(page_sno2);
 		scrap2.setPage_eno2(page_eno2);
 		
+		scrap3.setS_no3(s_no3);
+		scrap3.setE_no3(e_no3);
+		scrap3.setTotal3(total3);
+		scrap3.setTotal_page3(total_page3);
+		scrap3.setRownum3(rownum3);
+		scrap3.setPage_sno3(page_sno3);
+		scrap3.setPage_eno3(page_eno3);
+		
 		List<?> list1 = memberService.selectHotelList(hotel);
 		List<?> list2 = memberService.selectScrapRlist(scrap2);
+		List<?> list3 = memberService.selectScrapTlist(scrap3);
 		
 		model.addAttribute("list1",list1);
 		model.addAttribute("list2",list2);
+		model.addAttribute("list3",list3);
 		model.addAttribute("scrap2",scrap2);
+		model.addAttribute("scrap3",scrap3);
 		model.addAttribute("hotel",hotel);
 		
 		return "member/memberScrap";

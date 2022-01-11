@@ -12,7 +12,7 @@ pageEncoding="UTF-8"%>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
+
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -59,9 +59,7 @@ body {
 .div_button {
 	width:700px;text-align:center;margin-top:10px;
 }
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
-}
+
 a {
 	text-decoration:none;color:#000000;
 }
@@ -73,44 +71,15 @@ a {
 </script>
 
 <%@include file="mapScript1" %>
+
 <body>
+
+<%@include file="/include/top.jsp" %>
 
 <div class="container" style="margin:0 auto;">
 
-<%@include file="/include/top1.jsp" %>
-
-<header>
- 맛집 화면
-</header>
-
 	<div class = "div2">
-		
-		<div style="width:90%;
-		  			margin-left:30px;
-		  			margin-top:3px;
-		  			text-align:left;
-		  			font-weight:bold;
-		  			font-size:12px;">
-			<a href = "restaurantMain.do">지역별 맛집</a> &nbsp;&nbsp;&nbsp;
-			<a href = "">제철 맛집</a>
-	 	</div>
-	 	
-	 	<br><br>
-	 	
-	 	<form name = "frm" method = "post" action = "restaurantMain.do">
-		 	<div style="margin-left:250px;width:500px;">
-		 		<select name = "s_field">
-		 			<option value="address" <c:if test="${s_field=='address' }">selected</c:if>>지역</option>
-		 			<option value="menu" <c:if test="${s_field=='menu' }">selected</c:if>>메뉴</option>
-		 		</select>
-		 		
-		 		<input type = "text" name = "s_text" value = "${vo.s_text }" width="100px" height="30px">
-		 		<button type = "submit">검색</button>
-		 	</div>
-	 	</form>
-	 	
-	 	<br><br>
-		
+
 		<div style="text-align:left;margin-left:30px;">
 		*지역명을 클릭해보세요
 		</div>
@@ -138,6 +107,18 @@ a {
 			
 		</div>
 		
+		<form name = "frm" method = "post" action = "restaurantMain.do">
+		 	<div style="width:500px;float:right;margin-top:20px;margin-right:-70px;">
+		 		<select name = "s_field">
+		 			<option value="address" <c:if test="${s_field=='address' }">selected</c:if>>지역</option>
+		 			<option value="menu" <c:if test="${s_field=='menu' }">selected</c:if>>메뉴</option>
+		 		</select>
+		 		
+		 		<input type = "text" name = "s_text" value = "${vo.s_text }" width="100px" height="30px">
+		 		<button type = "submit">검색</button>
+		 	</div>
+	 	</form>
+		
 		<div style="width:90%;
 		  			margin-left:30px;
 		  			margin-top:3px;
@@ -160,7 +141,7 @@ a {
 						<a href = "restaurantDetail.do?unq=${result1.unq }">
 							<img src = "images/restaurant/${result1.title }1.jpg" width="250px" height="150px"> <br>
 							<span style="font-size:18px;">${result1.title }</span><br>
-							메뉴 : ${result1.topmenu } <br>
+							<span style="font-size:13px">메뉴 : ${result1.topmenu }</span> <br>
 						</a>
 					</div>
 				</c:forEach>
@@ -189,7 +170,7 @@ a {
 						<a href = "restaurantDetail.do?unq=${result2.unq }">
 							<img src = "images/restaurant/${result2.title }1.jpg" width="250px" height="150px"> <br>
 							<span style="font-size:18px;">${result2.title }</span> <br>
-							메뉴 : ${result2.topmenu } <br> 
+							<span style="font-size:13px">메뉴 : ${result2.topmenu }</span> <br> 
 						</a>
 					</div>
 				</c:forEach>
@@ -272,7 +253,7 @@ a {
 			pageContext.setAttribute("page_eno", page_eno) ;
  			%>
 			<c:forEach var="i" begin="${vo.page_sno }" end="${page_eno }">
-				<a href = "restaurantMain.do?page_no=${i }">${i }</a>
+				<a href = "restaurantMain.do?page_no=${i }"><span style="font-size:17px">${i }</span></a>
 			</c:forEach>
 			<%
 			if (page_eno+1 < total_page) {

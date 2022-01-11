@@ -30,17 +30,6 @@ public class RestaurantController {
 	@Resource(name="memberService")
 	MemberService memberSerivce;
 	
-	@RequestMapping(value="/main.do")
-	public String test6(RestaurantVO vo, Model model) throws Exception {
-		
-		// 추천 맛집 이미지
-		List<?> rImg = restaurantService.selectRecommendImg(vo);
-		
-		model.addAttribute("rImg", rImg);
-		
-		return "main/main";
-	}
-	
 	@RequestMapping(value="/test.do")
 	public String test() {
 		return "main/test";

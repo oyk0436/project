@@ -12,7 +12,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	
-	<link rel="stylesheet" href="css/admin_layout.css">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 	
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -26,9 +25,6 @@ body {
 }
 .container {
 	width:1000px;height:1000px;margin:0 auto;
-}
-header {
-	font-size:25px;font-weight:bold;width:1000px;height:100px;background-color:#ffcf6a;text-align:center;line-height:4.0;clear:right;
 }
 .buttonMap {
 	border:none;background-image:url(images/map/mapMouseout.png);background-size:38px 20px;width:38px;height:20px;text-align:center;font-size:small;
@@ -61,39 +57,13 @@ div.map {
 
 <body>
 
+<%@include file="/include/top.jsp" %>
+
 <div class="container">
-	<%@include file="/include/top1.jsp" %>
-<header>
- 맛집 화면
-</header>
 
 	<div class = "div2">
 		
-		<div style="width:90%;
-		  			margin-left:30px;
-		  			margin-top:3px;
-		  			text-align:left;
-		  			font-weight:bold;
-		  			font-size:12px;">
-			<a href = "restaurantMain.do">지역별 맛집</a> &nbsp;&nbsp;&nbsp;
-			<a href = "">제철 맛집</a>
-	 	</div>
-	 	
-	 	<br><br>
-	 	
-	 	<form name = "frm" method = "post" action = "recommendDetail.do">
-		 	<div style="margin-left:250px;width:500px;">
-		 		<select name = "s_field">
-		 			<option value="address" <c:if test="${s_field=='address' }">selected</c:if>>지역</option>
-		 			<option value="menu" <c:if test="${s_field=='menu' }">selected</c:if>>메뉴</option>
-		 		</select>
-		 		
-		 		<input type = "text" name = "s_text" width="100px" height="30px">
-		 		<button type = "submit">검색</button>
-		 	</div>
-	 	</form>
-	 	
-	 	<br><br>
+		<br>
 		
 		<div style="text-align:left;margin-left:30px;">
 		*지역명을 클릭해보세요
@@ -122,7 +92,19 @@ div.map {
 			
 		</div>
 		
-		<div style="clear:left;width:90%;text-align:left;margin-left:30px;padding:10px;font-size:20px;border-top:1px solid #000000;font-weight:bold;">
+		<form name = "frm" method = "post" action = "restaurantMain.do">
+		 	<div style="width:500px;float:right;margin-top:270px;margin-right:-70px;">
+		 		<select name = "s_field">
+		 			<option value="address" <c:if test="${s_field=='address' }">selected</c:if>>지역</option>
+		 			<option value="menu" <c:if test="${s_field=='menu' }">selected</c:if>>메뉴</option>
+		 		</select>
+		 		
+		 		<input type = "text" name = "s_text" value = "${vo.s_text }" width="100px" height="30px">
+		 		<button type = "submit">검색</button>
+		 	</div>
+	 	</form>
+		
+		<div style="clear:left;width:80%;text-align:left;margin-left:30px;padding:10px;font-size:20px;border-top:1px solid #000000;font-weight:bold;">
 		<span style="font-size:18px;color:#ff6666;">${vo.s_text }${vo.regionDetail }</span> <span style="font-size:18px;">실시간 인기 맛집 리스트</span>
 		</div>
 		
@@ -139,7 +121,7 @@ div.map {
 		 			 style = "width:250px;height:180px;">
 		 	</div>
 		 	
- 			<div style="width:80px;height:50px;float:left;margin-left:-10px;margin-top:0px;">
+ 			<div style="width:80px;height:50px;float:left;margin-left:-80px;margin-top:0px;">
 		 		<a href = "javscrip:;">
 		 			<img id = "smallImg1" 
 		 				 onmouseover = "document.getElementById('bigImg${number }').src ='images/restaurant/${result.title }1.jpg'"
