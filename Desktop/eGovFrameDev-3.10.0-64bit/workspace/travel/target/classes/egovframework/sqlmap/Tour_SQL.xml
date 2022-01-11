@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+	
+	<typeAlias  alias="egovMap"  type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="tourVO" type="egov.service.TourVO"/>
+	
+	<!-- 관광지 추천 목록 이미지 -->
+	<select id="tourDAO.selectRecommendImg" resultClass="egovMap">
+		select 
+		    b.*
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from (
+		        select 
+		            l.punq,
+		            (select unq from tour where unq = l.punq) unq, 
+		            (select title from tour where unq = l.punq) title,
+		            (select sum(grade) from linereview where punq = l.punq and category = 'tour')/(select count(*) from linereview where punq = l.punq and category = 'tour') grade
+		        from      
+		            linereview l, tour t
+		        where
+		            l.punq = t.unq
+		        and 
+		        	l.category = 'tour'
+		        <isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        group by 
+		                punq 
+		        order by 
+		                grade desc ) a ) b 
+		where 
+			rn <![CDATA[ < ]]>= 3
+	</select>
+	
+	<!-- 관광지 실시간 목록 이미지  -->
+	<select id="tourDAO.selectRealtimeImg" resultClass="egovMap">
+		select 
+			b.* 
+		from (
+			select 
+				rownum rn, a.* 
+			from 
+	    		(
+	    		select 
+	    			title, 
+	    			hits, 
+	    			unq
+	    		from 
+	    			tour
+	    		where
+	    			1 = 1
+	    		<isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+	    			order by hits desc) a ) b
+		where 
+			rn <![CDATA[ < ]]>= 3
+	</select>
+	
+	<!-- 관광지 전체 리스트 -->
+	<select id="tourDAO.selectTourList" resultClass="egovMap">
+		select 
+			b.*
+		from (
+			select 
+				rownum rn, a.* 
+			from (		
+				select
+					unq, 
+				    title, 
+				    address
+				from 
+				    tour
+				where
+					1=1
+					<isNotNull property="s_text">
+						<isNotEmpty property="s_text">
+							and $s_field$ like '%$s_text$%' 
+						</isNotEmpty> 		
+					</isNotNull>
+			        <isNotNull property="regionDetail">
+						<isNotEmpty property="regionDetail">
+							and address like '%$regionDetail$%' 
+						</isNotEmpty> 		
+					</isNotNull>
+				    ) a ) b
+		where
+			rn between $s_no$ and $e_no$
+	</select>
+	
+	<!-- 관광지 목록 총 개수 -->
+	<select id="tourDAO.selectTourTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			tour
+		where
+			1=1
+			<isNotNull property="s_text">
+				<isNotEmpty property="s_text">
+					and $s_field$ like '%$s_text$%' 
+				</isNotEmpty> 		
+			</isNotNull>
+	        <isNotNull property="regionDetail">
+				<isNotEmpty property="regionDetail">
+					and address like '%$regionDetail$%' 
+				</isNotEmpty> 		
+			</isNotNull>
+	</select>
+	
+	<!-- 관광지 상세페이지 -->
+	<select id="tourDAO.selectTourDetail" resultClass="tourVO">
+		select 
+			nvl(title,'정보없음') title,
+			nvl(zipcode,'정보없음') zipcode,
+			nvl(address,'정보없음') address,
+			nvl(latitude,0) latitude,
+			nvl(longitude,0) longitude,
+			nvl(heritage,'정보없음') heritage,
+			nvl(telephone,'정보없음') telephone,
+			nvl(open,'정보없음') open,
+			nvl(closed,'정보없음') closed,
+			nvl(experienceinfo,'정보없음') experienceinfo,
+			nvl(experiencenumber,'정보없음') experiencenumber,
+			nvl(accommodatenumber,'정보없음') accommodatenumber,
+			nvl(availabletime,'정보없음') availabletime,
+			nvl(car,'정보없음') car,
+			nvl(babycarriage,'정보없음') babycarriage,
+			nvl(pet,'정보없음') pet,
+			unq,
+			nvl(hits,0) hits
+		from
+			tour
+		where 
+			unq = $unq$
+	</select>
+	
+	<!-- 관광지 한줄 리뷰 목록 -->
+	<select id="tourDAO.selectLineReviewList" resultClass="egovMap">
+		select 
+			b.* 
+		from (
+			select 
+				rownum rn, a.* 
+			from (  select 
+					    unq, 
+					    punq, 
+					    content, 
+					    name, 
+					    pass, 
+					    grade, 
+					    to_char(rdate,'yyyy/mm/dd') rdate, 
+					    to_char(udate,'yyyy/mm/dd') udate 
+					from 
+					    linereview
+					where
+					    linereview.punq = (select unq from tour where unq = $unq$)
+					order by 
+						unq desc ) a ) b
+		where
+			rn between $s_no$ and $e_no$
+						
+	</select>
+	
+	<!-- 관광지 한줄 리뷰 총 개수 -->
+	<select id="tourDAO.selectLineReviewTotal" resultClass="java.lang.Integer">
+		select count(*) from linereview where punq = #unq# and category = 'tour'
+	</select>
+	
+	<!-- 관광지 평점 출력 -->
+	<select id="tourDAO.selectTourGrade" resultClass="java.lang.Integer">
+		select 
+    		nvl( round( (select sum(grade) from linereview where punq = $unq$ and category = 'tour')/
+    					(select count(*) from linereview where punq = $unq$ and category = 'tour')), 0)
+		from 
+		    lineReview 
+		where 
+		    punq = $unq$
+		and 
+		    category = 'tour'
+	</select>
+	
+	<!-- 관광지  조회수 증가 -->
+	<update id="tourDAO.updateTourHits">
+		update tour set hits = hits + 1 where unq = #unq#
+	</update>
+	
+	<!-- 관광지 한줄 리뷰 저장 -->
+	<insert id="tourDAO.insertLineReview">
+		insert into linereview (
+								 unq,
+								 punq,
+								 content,
+								 name,
+								 pass,
+								 grade,
+								 rdate,
+								 udate,
+								 userid,
+								 category,
+								 title )
+					values	   (
+					 			 linereview_seq.nextval,
+					 			 #punq#,
+								 #content#,
+								 #name#,
+								 #pass#,
+								 #grade#,
+								 sysdate,
+								 sysdate,
+								 #userid#,
+								 'tour',
+								 #title# )
+	</insert>
+	
+	
+</sqlMap>
+
+
+
+
+
+
+

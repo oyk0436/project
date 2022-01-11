@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="memberSpace">
+
+	<typeAlias  alias="egovMap"  type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="memberVO" type="egov.service.MemberVO"/>
+	
+	<!-- 회원가입 삽입 -->
+	<insert id="memberDAO.insertMember">
+		insert into member (
+							userid, 
+							pass,
+							name,
+							nick,
+							email,
+							phone,
+							gender,
+							address
+							)
+					values (
+							#userid#, 
+							#pass#,
+							#name#,
+							#nick#,
+							#email#,
+							#phone#,
+							#gender#,
+							#address#
+							)
+		
+	</insert>
+	
+	<!-- 회원가입시 아이디 확인 -->
+	<select id="memberDAO.selectMemberIdcheck" resultClass="java.lang.Integer">
+	 select count(*) from member where userid=#userid#
+	</select>
+	
+	<select id="memberDAO.selectPassCheck" resultClass="java.lang.Integer">
+		select count(*) from member where userid=#userid# and pass=#pass#
+	</select>
+	
+	<select id="memberDAO.selectMemberCertify" resultClass="memberVO">
+		select 
+			userid, 
+			name, 
+			nick,
+			email,
+			gender,
+			phone,
+			address
+		from 
+			member 
+		where
+			userid = #userid# 
+		and 
+			pass = #pass#	
+	</select>
+	
+	<!-- 회원 정보 -->
+	<select id="memberDAO.selectMemberInfo" resultClass="MemberVO">
+		select 
+			userid, 
+			name, 
+			nick, 
+			email, 
+			gender,
+			phone, 
+			address 
+		from 
+			member 
+		where 
+			userid=#userid#
+	</select>
+	
+	<update id="memberDAO.updateMemberInfo">
+		update
+			member
+		set
+			name=#name#,
+			nick=#nick#,
+			email=#email#,
+			gender=#gender#,
+			phone=#phone#,
+			address=#address#
+		where
+			userid=#userid#
+		and
+			pass=#pass#
+	</update>
+	
+	<update id="memberDAO.updateMemberPass">
+		update
+			member
+		set
+			pass=#pass#
+		where
+			userid=#userid	
+	</update>
+	
+	
+</sqlMap>

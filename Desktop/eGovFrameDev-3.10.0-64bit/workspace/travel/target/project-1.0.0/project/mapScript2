@@ -1,0 +1,165 @@
+<script>
+
+$( function() {
+	
+	var seoul = document.getElementById("seoul").value;
+	
+	$("#seoul").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+seoul,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var gyeonggi = document.getElementById("gyeonggi").value;
+	
+	$("#gyeonggi").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+gyeonggi,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var gangwon = document.getElementById("gangwon").value;
+	
+	$("#gangwon").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+gangwon,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var chungbuk = document.getElementById("chungbuk").value;
+	
+	$("#chungbuk").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+chungbuk,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var chungnam = document.getElementById("chungnam").value;
+	
+	$("#chungnam").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+chungnam,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var jeongbuk = document.getElementById("jeongbuk").value;
+	
+	$("#jeongbuk").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+jeongbuk,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var jeonnam = document.getElementById("jeonnam").value;
+	
+	$("#jeonnam").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+jeonnam,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var gyeongbuk = document.getElementById("gyeongbuk").value;
+	
+	$("#gyeongbuk").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+gyeongbuk,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var gyeongnam = document.getElementById("gyeongnam").value;
+	
+	$("#gyeongnam").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+gyeongnam,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+	
+	var jeju = document.getElementById("jeju").value;
+	
+	$("#jeju").click(function(){
+		$.ajax({
+			type: "post",
+			url : "/project/regionDetail2.jsp?region="+jeju,
+			dataType : "html",
+			success : function(data) {
+				$("#regionDetail").html(data);		
+			},
+			error : function(data) {
+				alert("오류발생");
+			}	
+		});
+	});
+});
+</script>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="memberSpace">
+
+	<typeAlias  alias="egovMap"  type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="memberVO" type="egov.service.MemberVO"/>
+	<typeAlias  alias="lineReviewVO" type="egov.service.LineReviewVO"/>
+	<typeAlias  alias="hotelorderVO" type="egov.service.HotelorderVO"/>
+	
+	<!-- 회원가입 삽입 -->
+	<insert id="memberDAO.insertMember">
+		insert into member (
+							userid, 
+							pass,
+							name,
+							nick,
+							year,
+							month,
+							day,
+							email,
+							phone1,
+							phone2,
+							phone3,
+							postcode,
+							roadaddress,
+							jibunaddress,
+							detailaddress,
+							gender )
+					values (
+							#userid#, 
+							#pass#,
+							#name#,
+							#nick#,
+							#year#,
+							#month#,
+							#day#,
+							#email#,
+							#phone1#,
+							#phone2#,
+							#phone3#,
+							#postcode#,
+							#roadaddress#,
+							#jibunaddress#,
+							#detailaddress#,
+							#gender# )	
+	</insert>
+	
+	<!-- 회원가입시 아이디 확인 -->
+	<select id="memberDAO.selectMemberIdcheck" resultClass="java.lang.Integer">
+	 	select count(*) from member where userid=#userid#
+	</select>
+	
+	<!-- 비밀번호 확인 -->
+	<select id="memberDAO.selectPassCheck" resultClass="java.lang.Integer">
+		select count(*) from member where userid=#userid# and pass=#pass#
+	</select>
+	
+	<!-- 회원 확인 -->
+	<select id="memberDAO.selectMemberCertify" resultClass="memberVO">
+		select 
+			userid, 
+			name, 
+			nick,
+			email,
+			gender
+		from 
+			member 
+		where
+			userid = #userid# 
+		and 
+			pass = #pass#	
+	</select>
+	
+	<!-- 회원 정보 -->
+	<select id="memberDAO.selectMemberInfo" resultClass="MemberVO">
+		select 
+			userid, 
+			name, 
+			nick, 
+			year,
+			month,
+			day,
+			email,
+			phone1,
+			phone2,
+			phone3,
+			postcode,
+			roadaddress,
+			jibunaddress,
+			detailaddress, 
+			gender
+		from 
+			member 
+		where 
+			userid=#userid#
+	</select>
+	
+	<!-- 음식 이용후기 리스트-->
+	<select id="memberDAO.selectRestaurantElist" resultClass="egovMap">
+		select 
+		    b.* 
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from (
+		        select 
+		        	unq,
+		            title, 
+		            content, 
+		            to_char(rdate,'yyyy/mm/dd') rdate 
+		        from 
+		            linereview 
+		        where 
+		            userid = '$userid$'
+		        and
+		        	category = 'restaurant'     
+		        order by 
+		            rdate desc ) a ) b
+		where
+			rn between #s_no2# and #e_no2#     
+		order by rownum asc
+	</select>
+	
+	<!-- 음식 이용 후기 총 개수 -->
+	<select id="memberDAO.selectRlistTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			linereview 
+		where 	
+			userid = #userid# 
+		and 
+			category='restaurant'
+	</select>
+	
+	<!-- 음식 이용 후기 수정 상세보기 -->
+	<select id="memberDAO.selectLineReviewDetail" resultClass="lineReviewVO">
+		select
+			name,
+			content,
+			grade
+		from
+			linereview
+		where
+			unq = #unq#
+	</select>
+	
+	<!-- 음식점 관심 목록 리스트 -->
+	<select id="memberDAO.selectScrapRlist" resultClass="egovMap">
+		select b.* from (
+		    select rownum rn, a.* from (
+		        select 
+		            unq, 
+		            punq, 
+		            title, 
+		            topmenu, 
+		            grade, 
+		            address,
+		            rdate
+		        from 
+		            scrap 
+		        where 
+		            userid = #userid# 
+		        and 
+		            category = 'restaurant' 
+		        order by
+		            rdate desc ) a ) b
+		where 
+		    rn between #s_no2# and #e_no2# 
+		order by rn asc
+	</select>
+	
+	<!-- 음식점 관심 목록 총 개수 -->
+	<select id="memberDAO.selectScrapRlistTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			scrap 
+		where 
+			userid = #userid# 
+		and 
+			category = 'restaurant'
+	</select>
+	
+	<!-- 숙박 예약 목록 리스트 -->
+	<select id="memberDAO.selectHotelList" resultClass="egovMap">
+		select b.* from (
+			select rownum rn, a.* from (
+				select
+					unq,
+					itemname,
+					to_char(price,'FM999,999,999') price,
+					userid,
+					to_char(odate, 'yyyy/mm/dd') odate
+				from
+					hotelorder
+				where
+					userid = #userid#
+				order by odate asc ) a ) b
+		where  
+			rn between #s_no1# and #e_no1#
+		order by rn asc
+	</select>
+	
+	<!-- 숙박 예약 현황 총 개수 -->
+	<select id="memberDAO.selectHotelListTotal" resultClass="java.lang.Integer">
+		select count(*) from hotelorder where userid = #userid#
+	</select>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="memberDAO.updateMemberInfo">
+		update
+			member
+		set
+			name=#name#,
+			nick=#nick#,
+			year=#year#,
+			month=#month#,
+			day=#day#,
+			email=#email#,
+			gender=#gender#,
+			phone1=#phone1#,
+			phone2=#phone2#,
+			phone3=#phone3#,
+			postcode=#postcode#,
+			roadaddress=#roadaddress#,
+			jibunaddress=#jibunaddress#,
+			detailaddress=#detailaddress#
+		where
+			userid=#userid#
+		and
+			pass=#pass#
+	</update>
+	
+	<!-- 회원 비밀번호 수정 -->
+	<update id="memberDAO.updateMemberPass">
+		update
+			member
+		set
+			pass = #newPass#
+		where
+			userid = #userid#
+	</update>
+	
+	<!-- 이용 후기 수정 -->
+	<update id="memberDAO.updateLineReviewSave">
+		update
+			linereview
+		set
+			name = #name#,
+			content = #content#,
+			grade = #grade#,
+			udate = sysdate
+		where
+			userid = #userid#
+		and
+			pass = #pass#
+		and
+			unq = #unq#
+	</update>
+	
+	<!-- 회원 삭제 -->
+	<delete id="memberDAO.deleteMember">
+		delete member where userid=#userid#
+	</delete>
+	
+	<!-- 이용 후기 삭제 -->
+	<delete id="memberDAO.deleteLineReview">
+		delete linereview where unq = #unq# and pass = #pass#
+	</delete>
+	
+	<!-- 스크랩 삭제 -->
+	<delete id="memberDAO.deleteScrap">
+		delete scrap where unq = #unq#
+	</delete>
+	
+</sqlMap>

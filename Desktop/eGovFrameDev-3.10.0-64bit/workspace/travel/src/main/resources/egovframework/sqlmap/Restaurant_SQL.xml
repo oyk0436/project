@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="restaurantSpace">
+
+	<typeAlias  alias="egovMap"  type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="restaurantVO" type="egov.service.RestaurantVO"/>
+	<typeAlias  alias="scrapVO" type="egov.service.ScrapVO"/>
+	
+	<!-- 맛집 추천 목록 이미지 -->
+	<select id="restaurantDAO.selectRecommendImg" resultClass="egovMap">
+		select 
+		    b.*
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from (
+		        select 
+		            l.punq,
+		            (select unq from restaurant where unq = l.punq) unq, 
+		            (select title from restaurant where unq = l.punq) title,
+		            (select topmenu from restaurant where unq = l.punq) topmenu,
+		            (select nvl(sum(grade),0) from linereview where punq = l.punq and category = 'restaurant') /
+		            (select count(*) from linereview where punq = l.punq and category = 'restaurant') grade
+		        from      
+		            linereview l, restaurant r
+		        where
+		            l.punq = r.unq
+		        and
+		        	l.category = 'restaurant'
+		        <isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        group by 
+		                punq 
+		        order by 
+		                grade desc ) a ) b 
+		where 
+			rn <![CDATA[ < ]]>= 3
+	</select>
+	
+	<!-- 맛집 실시간 목록 이미지  -->
+	<select id="restaurantDAO.selectRealtimeImg" resultClass="egovMap">
+		select 
+			b.* 
+		from (
+			select 
+				rownum rn, a.* 
+			from 
+	    		(
+	    		select 
+	    			title, 
+	    			hits, 
+	    			unq, 
+	    			topmenu 
+	    		from 
+	    			restaurant 
+	    		where
+	    			1 = 1
+	    		<isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+	    			order by hits desc) a ) b
+		where 
+			rn <![CDATA[ < ]]>= 3
+	</select>
+	
+	<!-- 음식점 전체 리스트 -->
+	<select id="restaurantDAO.selectTotalRestaurantList" resultClass="egovMap">
+		select 
+			b.*
+		from (
+			select 
+				rownum rn, a.* 
+			from (		
+				select
+					unq, 
+				    title, 
+				    topmenu, 
+				    address
+				from 
+				    restaurant 
+				where
+					1=1
+					<isNotNull property="s_text">
+						<isNotEmpty property="s_text">
+							and $s_field$ like '%$s_text$%' 
+						</isNotEmpty> 		
+					</isNotNull>
+			        <isNotNull property="regionDetail">
+						<isNotEmpty property="regionDetail">
+							and address like '%$regionDetail$%' 
+						</isNotEmpty> 		
+					</isNotNull>
+				    ) a ) b
+		where
+			rn between $s_no$ and $e_no$
+	</select>
+	
+	<!-- 음식점 목록 총 개수 -->
+	<select id="restaurantDAO.selectRestaurantTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			restaurant
+		where
+			1=1
+			<isNotNull property="s_text">
+				<isNotEmpty property="s_text">
+					and $s_field$ like '%$s_text$%' 
+				</isNotEmpty> 		
+			</isNotNull>
+	        <isNotNull property="regionDetail">
+				<isNotEmpty property="regionDetail">
+					and address like '%$regionDetail$%' 
+				</isNotEmpty> 		
+			</isNotNull>
+	</select>
+	
+	<!-- 추천 맛집 목록 리스트 -->
+	<select id="restaurantDAO.selectRecommendDetail" resultClass="egovMap">
+		select 
+		    b.*
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from (
+		        select 
+		            l.punq,
+		            (select unq from restaurant where unq = l.punq) unq, 
+		            (select title from restaurant where unq = l.punq) title,
+		            (select topmenu from restaurant where unq = l.punq) topmenu,
+		            (select address from restaurant where unq = l.punq) address,
+		            (select telephone from restaurant where unq = l.punq) telephone,
+		            (select nvl((sum(grade)/count(*)), 0) from linereview where punq = l.punq) grade1,
+		            (select nvl(round(sum(grade)/count(*)), 0) from linereview where punq = l.punq) grade2
+		        from      
+		            linereview l, restaurant r
+		        where
+		            l.punq = r.unq
+		        <isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        group by 
+		                punq 
+		        order by 
+		                grade1 desc ) a ) b 
+		where 
+			rn between $s_no$ and $e_no$
+	</select>
+	
+	<!-- 추천 맛집 목록 총 개수 -->
+	<select id="restaurantDAO.selectRecommendTotal" resultClass="java.lang.Integer">
+		select 
+		    count(distinct(punq))
+		from      
+		    linereview l, restaurant r
+		where
+		    l.punq = r.unq
+		<isNotNull property="s_text">
+			<isNotEmpty property="s_text">
+				and $s_field$ like '%$s_text$%' 
+			</isNotEmpty> 		
+		</isNotNull>
+        <isNotNull property="regionDetail">
+			<isNotEmpty property="regionDetail">
+				and address like '%$regionDetail$%' 
+			</isNotEmpty> 		
+		</isNotNull>
+	</select>
+	
+	<!-- 실시간 인기 맛집 목록 리스트 -->
+	<select id="restaurantDAO.selectRealtimeDetail" resultClass="egovMap">
+		select 
+		    b.* 
+		from (
+		    select 
+		        rownum rn, a.* 
+		    from 
+		        (
+		        select 
+		            unq,
+		            title,
+		            topmenu,
+		            address,
+		            telephone,
+		            hits
+		        from 
+		            restaurant 
+		        where
+		            1 = 1
+		        <isNotNull property="s_text">
+					<isNotEmpty property="s_text">
+						and $s_field$ like '%$s_text$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        <isNotNull property="regionDetail">
+					<isNotEmpty property="regionDetail">
+						and address like '%$regionDetail$%' 
+					</isNotEmpty> 		
+				</isNotNull>
+		        order by 
+		            hits desc) a ) b
+		where 
+		    rn between $s_no$ and $e_no$
+	</select>
+	
+	<!-- 실시간 인기 맛집 목록 총 개수 -->
+	<select id="restaurantDAO.selectRealtimeTotal" resultClass="java.lang.Integer">
+		select 
+			count(*) 
+		from 
+			restaurant 
+		where 
+			hits != 0
+		<isNotNull property="s_text">
+			<isNotEmpty property="s_text">
+				and $s_field$ like '%$s_text$%' 
+			</isNotEmpty> 		
+		</isNotNull>
+        <isNotNull property="regionDetail">
+			<isNotEmpty property="regionDetail">
+				and address like '%$regionDetail$%' 
+			</isNotEmpty> 		
+		</isNotNull> 
+			 
+	</select>
+	
+	<!-- 맛집 상세페이지 -->
+	<select id="restaurantDAO.selectRestaurantDetail" resultClass="restaurantVO">
+		select 
+			title, zipcode, manager, nvl(address,'정보 없음') address, latitude, longitude, nvl(telephone,'정보 없음') telephone,
+			nvl(parking,'정보 없음') parking, nvl(child,'정보 없음') child, nvl(availiabletime,'정보 없음') availiabletime, nvl(closed,'정보 없음') closed, 
+			nvl(topmenu,'정보 없음') topmenu, nvl(menu,'정보 없음') menu, nvl(smoking,'정보 없음') smoking, nvl(packaging,'정보 없음') packaging,
+			nvl(information,'정보 없음') information, nvl(summary,'정보없음') summary, latitude, longitude, unq, grade, hits
+		from 
+			restaurant
+		where
+			unq = #unq#
+	</select>
+	
+	<!-- 맛집 평점 출력 -->
+	<select id="restaurantDAO.selectRestaurantGrade" resultClass="java.lang.Integer">
+		select nvl(round(sum(grade)/count(*)), 0) from linereview where punq = $unq$
+	</select>
+	
+	<!-- 맛집 지도 위치 불러오기 -->
+	<select id="restaurantDAO.selectRestaurantMap" resultClass="egovMap">
+		select latitude, longitude, title, zipcode, address from restaurant
+	</select>
+	
+	<!-- 숙박 지도 위치 불러오기 -->
+	<select id="restaurantDAO.selectTravelMap" resultClass="egovMap">
+		select latitude, longitude, title, zipcode, address from travel
+	</select>
+	
+	<!-- 관광지 지도 위치 불러오기 -->
+	<select id="restaurantDAO.selectTourMap" resultClass="egovMap">
+		select nvl(latitude, '0') latitude, nvl(longitude, '0') longitude, title from tour
+	</select>
+	
+	<!-- 맛집 한줄 리뷰 목록 -->
+	<select id="restaurantDAO.selectLineReviewList" resultClass="egovMap">
+		select 
+			b.* 
+		from (
+			select 
+				rownum rn, a.* 
+			from (  select 
+					    unq, 
+					    punq, 
+					    content, 
+					    name, 
+					    pass, 
+					    grade, 
+					    to_char(rdate,'yyyy/mm/dd') rdate, 
+					    to_char(udate,'yyyy/mm/dd') udate 
+					from 
+					    linereview
+					where
+					    linereview.punq = (select unq from restaurant where unq = $unq$)
+					order by 
+						unq desc ) a ) b
+		where
+			rn between $s_no$ and $e_no$
+			
+			
+	</select>
+	
+	<!-- 맛집 한질 리뷰 총 개수 -->
+	<select id="restaurantDAO.selectLineReviewTotal" resultClass="java.lang.Integer">
+		select count(*) from linereview where punq = #unq#
+	</select>
+	
+	<!-- 스크랩 유무 확인 -->
+	<select id="restaurantDAO.selectScrapCount" resultClass="java.lang.Integer">
+		select count(*) from scrap where userid = #userid# and punq = #unq#
+	</select>
+	
+	<!-- 스크랩 상태 확인 -->
+	<select id="restaurantDAO.selectScrapDetail" resultClass="java.lang.Integer">
+		select status from scrap where userid = #userid# and punq = #unq#
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="restaurantDAO.updateRestaurantHits">
+		update restaurant set hits = hits + 1 where unq = #unq#
+	</update>
+
+	<!-- 스크랩 수정 -->
+	<update id="restaurantDAO.updateScrap">
+		update scrap set status = #status#, rdate = sysdate where userid = #userid# and punq = #unq#
+	</update>
+
+	<!-- 맛집 한줄 리뷰 삽입 -->
+	<insert id="restaurantDAO.insertLineReview">
+		insert into linereview (
+								 unq,
+								 punq,
+								 content,
+								 name,
+								 pass,
+								 grade,
+								 rdate,
+								 udate,
+								 userid,
+								 category,
+								 title )
+					values	   (
+					 			 linereview_seq.nextval,
+					 			 #punq#,
+								 #content#,
+								 #name#,
+								 #pass#,
+								 #grade#,
+								 sysdate,
+								 sysdate,
+								 #userid#,
+								 #category#,
+								 #title# )
+	</insert>
+	
+	<!-- 스크랩 저장 -->
+	<insert id="restaurantDAO.insertScrap">
+		insert into Scrap (
+							unq,
+							punq,
+							userid,
+							title,
+							topmenu,
+							grade,
+							address,
+							status,
+							category,
+							rdate )
+					values (
+							scrap_seq.nextval,
+							#unq#,
+							#userid#,
+							#title#,
+							#topmenu#,
+							#grade#,
+							#address#,
+							1,
+							#category#,
+							sysdate)
+	</insert>
+	
+</sqlMap>
+
+
+
+
+
+
