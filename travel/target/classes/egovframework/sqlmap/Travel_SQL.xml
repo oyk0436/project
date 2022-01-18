@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+ 
 <sqlMap namespace="TravelSpace">
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="travelVO" type="travel.service.TravelVO"/>
+	<typeAlias  alias="orderVO" type="travel.service.OrderVO"/>
+
+	<select id="travelDAO.searchSigungucode" resultClass="TravelVO">
+			select cityname,areacode,sigungucode from koreaareacode where cityname=#search# and sigungucode is not null
+	</select>
+	<select id="travelDAO.searchAreacode" resultClass="TravelVO">
+			select areacode from koreaareacode where cityname=substr(#search#,1,2) or cityname=substr(#search#,1,3) or cityname=substr(#search#,1,4)
+	</select>
+	<select id="travelDAO.findnextorderid" resultClass="java.lang.Integer">
+			select last_number from user_sequences
+					where SEQUENCE_NAME= 'ORDERIDSEQ'
+	</select>
+	<select id="travelDAO.selectOrderlist" resultClass="egovMap">
+			select unq,itemname,price,userid,odate from hotelorder
+	</select> 
+	<insert id="travelDAO.inserthotelorder" >
+		insert into hotelorder (unq,itemname,price,userid,odate) values (orderidseq.nextval,#item_name#,#price#,#userid#,sysdate)
+	</insert>
+	<delete id="travelDAO.deleteOrderlist">
+		delete from hotelorder where unq=#unq#
+	</delete>
+	<select id="travelDAO.selectFindOrder" resultClass="orderVO">
+		select unq,itemname,price,userid,odate from hotelorder where unq= #unq# 
+	</select>
+	<insert id="travelDAO.insertXOrderlist">
+		insert into deletehotelorder (unq,itemname,price,userid,odate) values (#unq#,#itemname#,#price#,#userid#,#odate#)
+	</insert>
 </sqlMap>

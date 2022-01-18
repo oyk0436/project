@@ -49,9 +49,9 @@
 	.mapbtn3 {position:absolute;top:1%;right:17.1%;z-index:2;}
 	@media screen and (-webkit-min-device-pixel-ratio:0){ 
 	  .mapbtn2{
-	  	position:absolute;top:1%;right:7.9%;z-index:2;
+	  	position:absolute;top:1%;right:5.6%;z-index:2;
 	  }
 	  .mapbtn3{
-	 	position:absolute;top:1%;right:16.5%;z-index:2;
+	 	position:absolute;top:1%;right:11.3%;z-index:2;
 	  }
 	}

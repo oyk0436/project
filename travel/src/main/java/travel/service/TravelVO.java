@@ -9,11 +9,16 @@ public class TravelVO {
 	String roomtype;
 	String place="";
 	String cityname;
+	int areacode;
+	String sigungucode;
 	String totalcnt;
-	String areacode;
 	String contentid;
 	String contenttypeid;
 	String roomimg1;
+	String roomimg2;
+	String roomimg3;
+	String roomimg4;
+	String roomimg5;
 	String roomimg1alt;
 	String roomoffseasonminfee1; /*비수기주중최소가격*/
 	String roomoffseasonminfee2; /*비수기주말최소가격*/
@@ -21,7 +26,87 @@ public class TravelVO {
 	String roompeakseasonminfee2; /*성수기주말최소가격*/
 	String roommaxcount;
 	String overview;
+	String tel;
+	String day;
+	String people;
+	String roomcount;
+	String price;
+	double mapx;
+	double mapy;
 	
+	
+	public double getMapx() {
+		return mapx;
+	}
+	public void setMapx(double mapx) {
+		this.mapx = mapx;
+	}
+	public double getMapy() {
+		return mapy;
+	}
+	public void setMapy(double mapy) {
+		this.mapy = mapy;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getRoomcount() {
+		return roomcount;
+	}
+	public void setRoomcount(String roomcount) {
+		this.roomcount = roomcount;
+	}
+	public String getPeople() {
+		return people;
+	}
+	public void setPeople(String people) {
+		this.people = people;
+	}
+	public String getDay() {
+		return day;
+	}
+	public void setDay(String day) {
+		this.day = day;
+	}
+	public String getSigungucode() {
+		return sigungucode;
+	}
+	public void setSigungucode(String sigungucode) {
+		this.sigungucode = sigungucode;
+	}
+	public String getRoomimg2() {
+		return roomimg2;
+	}
+	public void setRoomimg2(String roomimg2) {
+		this.roomimg2 = roomimg2;
+	}
+	public String getRoomimg3() {
+		return roomimg3;
+	}
+	public void setRoomimg3(String roomimg3) {
+		this.roomimg3 = roomimg3;
+	}
+	public String getRoomimg4() {
+		return roomimg4;
+	}
+	public void setRoomimg4(String roomimg4) {
+		this.roomimg4 = roomimg4;
+	}
+	public String getRoomimg5() {
+		return roomimg5;
+	}
+	public void setRoomimg5(String roomimg5) {
+		this.roomimg5 = roomimg5;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 	public String getRoomoffseasonminfee2() {
 		return roomoffseasonminfee2;
 	}
@@ -82,10 +167,10 @@ public class TravelVO {
 	public void setContenttypeid(String contenttypeid) {
 		this.contenttypeid = contenttypeid;
 	}
-	public String getAreacode() {
+	public int getAreacode() {
 		return areacode;
 	}
-	public void setAreacode(String areacode) {
+	public void setAreacode(int areacode) {
 		this.areacode = areacode;
 	}
 	public String getTotalcnt() {
@@ -97,8 +182,8 @@ public class TravelVO {
 	public String getCityname() {
 		return cityname;
 	}
-	public void setCityname(String dosiname) {
-		this.cityname = dosiname;
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
 	}
 	public String getTitle() {
 		return title;

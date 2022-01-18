@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://js.tosspayments.com/v1"></script>
 </head>
 
 <style>
@@ -17,111 +21,95 @@
 		border:2px solid #dbdbdb;
 		padding:20px 20px 50px 20px ;
 	}
+	.information input{
+		border:0;
+		width:50px;
+		text-align:center;
+		outline:none;
+	}
 	
-	img{
-		display:inline-block; width:30px; height:30px;
+	.img2{
+		display:inline-block; width:90px; height:50px;
 	}
 	 .pay{
 		height:130px;
 		width:600px;
-		border:1px solid;
 		display:inline-block;
 	}
-	
-
-	
+	h4{
+		color:#b4b4b4;
+		line-height:1px;
+	}
+	.pay{
+		padding-top:10px;
+	}
+	.paybtn{
+		width:120px;
+		height:50px;
+		float:right;
+		background-color:#ffeb33;
+		border:0px;
+		border-radius:2px;
+		font-size:18px;
+		font-weight:bold;
+	}
 	
 </style>
 
 <script>
-
-	function fn_naverpay(){
-	    var oPay = Naver.Pay.create({
-	          "mode" : "production", // development or production
-	          "clientId": "u86j4ripEt8LRfPGzQ8" // clientId
-	    });
-	
-	    //직접 만드신 네이버페이 결제버튼에 click Event를 할당하세요
-	    var elNaverPayBtn = document.getElementById("naverPayBtn");
-	
-	    elNaverPayBtn.addEventListener("click", function() {
-	        oPay.open({
-	          "merchantUserKey": "test",
-	          "merchantPayKey": "1111",
-	          "productName": "입력",
-	          "totalPayAmount": "10000",
-	          "taxScopeAmount": "10000",
-	          "taxExScopeAmount": "0",
-	          "returnUrl": "사용자 결제 완료 후 결제 결과를 받을 URL"
-	        });
-	    });
-	    
-	}
-	
-    function fn_kakaopay(){
-    	var url="https://mockup-pg-web.kakao.com/v1/03bd53b83bb2841568ea3428a0e04663f03df98261f26af046d7d55a3642b885/info";
-		var w=window.screen.width/2-250;
-		var h=window.screen.height/2-250;
+	function payment(){
 		
-		window.open(url,"popup","width =620,height=330,left="+w+",top="+h);
-    }
-    
-    function fn_morepay(){
-	      var tossPayments = TossPayments('test_ck_OEP59LybZ8Bdv6A1JxkV6GYo7pRe')
-	
-	      tossPayments.requestPayment('카드', {
-	        amount: 25000,
-	        orderId: '5FJYaxYyYfuUmIDbih1pJ',
-	        orderName: '토스 티셔츠 외 2건',
-	        customerName: '김토스',
-	        successUrl: 'https://test.com/success',
-	        failUrl: 'https://test.com/fail',
-	      })
-    }
+	}
 </script>
-
 <body>
+	<%@ include file="../include/top.jsp" %>
+	<form method="post" action="/kakaoPay.do">
 	<div class="information">
 		<div style="font-size:22px;font-weight:bold;border-bottom:2px solid #808080;padding:10px;">
 			예약자 정보
 		</div>
-		<div>
-			<p>이름</p>
-			<input type="text" name="uname" id="uname" style="width:300px;height:30px;">
+		<div style="margin-right:15px;margin-top:30px;">
+			<a >이름 :   홍길동</a>
+			
 		</div>
-		<div>
-			<p>휴대폰</p>
-			<input type="text" name="phone" id="phone" style="width:300px;height:30px;">
+		<div style="margin-top:30px;">
+			<a >휴대폰:   010-1234-5678</a>
+			
 		</div>
 	</div>
 	<div class="information" style="height:250px;">
-	
+		<input type="hidden" name="day" id="day" value="${list.day}">
+		
 		<h1>상품 정보</h1>
-		#상품 데이터 불러 오는 곳#
+		<input type="text" class="h3" name="title" id="title" style="width:300px;text-align:left;"value="${list.title}" readonly>
+		<input type="text" class="h4" name="roomtype" id="roomtype" style="width:200px;text-align:left;" value="${list.roomtype}" readonly>
+		<p>객실 가격: <input type="text" class="h4" name="price" id="price" value="${list.price}" readonly>원</p>
+		<p>
+			인원: <input type="text" class="h4" name="people" id="people" value="${list.people}" readonly> 명
+			객실: <input type="text" class="h4" name="roomcount" id="roomcount" value="${list.roomcount}" readonly> 개
+		</p>
+		<p>${list.chkin} ~ ${list.chkout} | ${list.day}일</p>
+		
 	</div>
-	
 	<div class="information">
 	
 		<h2>결제 수단 선택</h2>
 		<p>은행 점검시간인 23:30~00:30 까지 이용 불가한 계좌이체 결제수단이 포함되어 있습니다.</p>
 		<div  class="pay">
 
-			<input type="checkbox" name="naverpay" id="cardpay" >
-			<img src="/images/naverpay.png"  class="img2">
-		
-			<input type="checkbox" name="kakaopay" id="cardpay" >
-			<img src="/images/kakaopay.png"  class="img2">
-			
+			<h2> 현제 결제는 카카오페이만 됩니다</h2>
 		
 			
-			<input type="checkbox" name="card" id="cardpay" ><a>간편 카드 결제</a>
+		
+
 		</div>
 	</div>
 	
 	<div class="information" style="text-align:right;border:0px;">
 		
-		<a style="font-size:22px;font-weight:bold;margin-right:40px;">#임시 4박 11,111원#</a>
-		<button type="button" style="width:120px;height:50px;float:right;background-color:#dbdbdb;border:0px;border-radius:2px;font-size:18px;font-weight:bold;">결제 하기</button>
+		<a style="font-size:22px;font-weight:bold;margin-right:40px;">${list.day} /박 객실 ${list.roomcount} 개 ${list.price*list.day*list.roomcount} 원</a>
+		<button type="submit" class="paybtn" onclick="payment()" style="">결제 하기</button>
 	</div>
+	</form>
 </body>
 </html>
