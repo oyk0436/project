@@ -294,18 +294,17 @@ $(function(){
 			<div style="display:table-row;text-align:center;">
 				<c:set var="phone1" value = "${vo.phone1 }"/>
 				<% 
-				int phone1 = (int) pageContext.getAttribute("phone1");
-				String phone = String.valueOf(phone1);
+				String phone1 = (String) pageContext.getAttribute("phone1");
 				%>
 				<div class="membercell1">휴대폰 번호</div>
 				<div class="membercell2">
 					<select name = "phone1" id="phone1">
-						<option value = "010" <%if(phone == "010") {out.print("selected");} %>>010</option>
-						<option value = "011" <%if(phone == "011") {out.print("selected");} %>>011</option>
-						<option value = "016" <%if(phone == "016") {out.print("selected");} %>>016</option>
-						<option value = "017" <%if(phone == "017") {out.print("selected");} %>>017</option>
-						<option value = "018" <%if(phone == "018") {out.print("selected");} %>>018</option>
-						<option value = "019" <%if(phone == "019") {out.print("selected");} %>>019</option>
+						<option value = "010" <%if(phone1 == "010") {out.print("selected");} %>>010</option>
+						<option value = "011" <%if(phone1 == "011") {out.print("selected");} %>>011</option>
+						<option value = "016" <%if(phone1 == "016") {out.print("selected");} %>>016</option>
+						<option value = "017" <%if(phone1 == "017") {out.print("selected");} %>>017</option>
+						<option value = "018" <%if(phone1 == "018") {out.print("selected");} %>>018</option>
+						<option value = "019" <%if(phone1 == "019") {out.print("selected");} %>>019</option>
 					</select> -	
 					<input type="text" name = "phone2" id="phone2" class="input1" value = "${vo.phone2 }" style = "width:55px;"> -
 					<input type="text" name = "phone3" id="phone3" class="input1" value = "${vo.phone3 }" style = "width:55px;">

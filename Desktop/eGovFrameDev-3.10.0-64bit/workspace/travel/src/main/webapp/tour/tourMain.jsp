@@ -154,7 +154,7 @@ a {
 		  			height:200px;
 		  			border-top:1px solid #000000;
 		  			padding:10px;">
-			<span style="font-size:18px;color:#ff6666;">${vo.s_text }${vo.regionDetail }</span> <span style="font-size:18px;">실시간 인기 맛집 </span><br>
+			<span style="font-size:18px;color:#ff6666;">${vo.s_text }${vo.regionDetail }</span> <span style="font-size:18px;">실시간 인기 관광지 </span><br>
 			
 			<div style="float:right;">
 				<a href = "tRealtimeDetail.do">더보기</a>

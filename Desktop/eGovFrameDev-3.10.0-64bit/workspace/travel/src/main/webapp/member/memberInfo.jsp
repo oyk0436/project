@@ -115,7 +115,7 @@ function btn_memberOut() {
 		
 	<div style="position:relative;text-align:left;">
 	
-	<span style="font-size:15px;font-weight:bold;margin-left:50px;">사이트 이용정보 입력</span>
+	<span style="font-size:15px;font-weight:bold;margin-left:50px;">사이트 이용정보</span>
 	
 		<div style="display:table;position:relative;width:700px;margin-left:50px;top:10px;border-top:2px solid #000000;">
 	 		<div style="display:table-row;text-align:center;">
@@ -134,7 +134,7 @@ function btn_memberOut() {
 	
 	<div style="position:relative;text-align:left;top:30px;">
 	
-	<span style="font-size:15px;font-weight:bold;margin-left:50px;">개인정보 입력</span>
+	<span style="font-size:15px;font-weight:bold;margin-left:50px;">개인정보</span>
 	
 		<div style="display:table;position:relative;width:700px;margin-left:50px;top:10px;border-top:2px solid #000000;">
 	 		<div style="display:table-row;text-align:center;">

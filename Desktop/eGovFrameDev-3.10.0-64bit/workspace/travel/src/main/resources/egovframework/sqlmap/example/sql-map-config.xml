@@ -6,4 +6,5 @@
 	<sqlMap resource="egovframework/sqlmap/Restaurant_SQL.xml"/>
 	<sqlMap resource="egovframework/sqlmap/Member_SQL.xml"/>
 	<sqlMap resource="egovframework/sqlmap/Tour_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/Travel_SQL.xml"/>
 </sqlMapConfig>
