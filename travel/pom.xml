@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>a
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -69,7 +69,7 @@
     </repositories>
 
 	<dependencies>
-		<!-- ?��??�레?�워???�행?�경 -->
+		<!-- ?œì??„ë ˆ?„ì›Œ???¤í–‰?˜ê²½ -->
         <dependency>
 		    <groupId>egovframework.rte</groupId>
 		    <artifactId>egovframework.rte.ptl.mvc</artifactId>
@@ -130,7 +130,7 @@
 
 		
 
-        <!-- mysql?�나 oracle DB ?�용???�래 ?�정 추�?
+        <!-- mysql?´ë‚˜ oracle DB ?¬ìš©???„ëž˜ ?¤ì • ì¶”ê?
         <dependency>
             <groupId>com.googlecode.log4jdbc</groupId>
             <artifactId>log4jdbc</artifactId>
